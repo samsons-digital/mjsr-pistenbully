@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PistenBully 400 W — Operations Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0f1117; --surface:#181c27; --surface2:#1e2333; --border:#2a3048;
+    --accent:#e8a020; --accent2:#f0c060; --blue:#3d8bcd;
+    --green:#2ecc71; --red:#e74c3c; --amber:#f39c12;
+    --text:#e8ecf4; --muted:#7a8499; --snow:#c8d8f0;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+  .top-bar{background:linear-gradient(135deg,#0a0d14,#111520,#0e1219);border-bottom:2px solid var(--accent);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,.6);}
+  .brand{display:flex;align-items:center;gap:14px;}
+  .brand-icon{width:42px;height:42px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#000;font-family:'Barlow Condensed',sans-serif;letter-spacing:-1px;}
+  .brand-text h1{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:1px;color:var(--accent);text-transform:uppercase;line-height:1;}
+  .brand-text p{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+  .top-right{display:flex;align-items:center;gap:14px;}
+  .hour-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 14px;text-align:center;}
+  .hour-box .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+  .hour-box .val{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;color:var(--accent);line-height:1.1;}
+  .pill{font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;}
+  .pill.green{background:rgba(46,204,113,.15);color:var(--green);border:1px solid rgba(46,204,113,.3);}
+  .nav-tabs{background:var(--surface);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;padding:0 16px;gap:2px;}
+  .nav-tab{display:flex;align-items:center;gap:7px;padding:13px 18px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);background:transparent;border:none;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s;}
+  .nav-tab:hover{color:var(--text);}
+  .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(232,160,32,.05);}
+  .nav-tab .bdg{background:var(--red);color:#fff;font-size:9px;border-radius:10px;padding:1px 6px;margin-left:2px;}
+  .main{padding:22px;max-width:1400px;margin:0 auto;}
+  .tab-content{display:none;}
+  .tab-content.active{display:block;animation:fadeIn .22s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+  .sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+  .sec-hdr h2{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+  .sec-hdr h2 span{color:var(--accent);}
+  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:20px;}
+  .sc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative;overflow:hidden;}
+  .sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+  .sc.a::before{background:var(--accent)}.sc.b::before{background:var(--blue)}.sc.g::before{background:var(--green)}.sc.r::before{background:var(--red)}.sc.am::before{background:var(--amber)}
+  .sc .sl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;}
+  .sc .sv{font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:800;line-height:1;}
+  .sc .ss{font-size:12px;color:var(--muted);margin-top:3px;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:18px;}
+  .card-hdr{padding:13px 18px;border-bottom:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  table{width:100%;border-collapse:collapse;}
+  th{background:var(--surface2);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:9px 14px;text-align:left;border-bottom:1px solid var(--border);}
+  td{padding:11px 14px;border-bottom:1px solid rgba(42,48,72,.45);font-size:13px;vertical-align:middle;}
+  tr:last-child td{border-bottom:none;}
+  tr:hover td{background:rgba(255,255,255,.02);}
+  .badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;}
+  .ok{background:rgba(46,204,113,.12);color:var(--green);border:1px solid rgba(46,204,113,.25);}
+  .due{background:rgba(231,76,60,.12);color:var(--red);border:1px solid rgba(231,76,60,.3);}
+  .soon{background:rgba(243,156,18,.12);color:var(--amber);border:1px solid rgba(243,156,18,.3);}
+  .breakdown{background:rgba(231,76,60,.12);color:var(--red);border:1px solid rgba(231,76,60,.3);}
+  .scheduled{background:rgba(61,139,205,.12);color:var(--blue);border:1px solid rgba(61,139,205,.3);}
+  .inspection{background:rgba(200,216,240,.1);color:var(--snow);border:1px solid rgba(200,216,240,.2);}
+  .operational{background:rgba(46,204,113,.12);color:var(--green);border:1px solid rgba(46,204,113,.25);}
+  .observation{background:rgba(243,156,18,.12);color:var(--amber);border:1px solid rgba(243,156,18,.3);}
+  .notcleared{background:rgba(231,76,60,.12);color:var(--red);border:1px solid rgba(231,76,60,.3);}
+  .muted-badge{background:rgba(122,132,153,.12);color:var(--muted);border:1px solid rgba(122,132,153,.2);}
+  .prog-wrap{background:rgba(255,255,255,.06);border-radius:4px;height:5px;width:100px;overflow:hidden;display:inline-block;}
+  .prog-fill{height:100%;border-radius:4px;}
+  .form-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px;margin-bottom:18px;}
+  .form-card h3{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;color:var(--accent);}
+  .frow{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:12px;}
+  .fg{display:flex;flex-direction:column;gap:5px;}
+  .fg label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:600;}
+  .fg input,.fg select,.fg textarea{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:8px 11px;font-family:'Barlow',sans-serif;font-size:13px;transition:border-color .2s;}
+  .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--accent);}
+  .fg textarea{resize:vertical;min-height:75px;}
+  .check-sec{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px;}
+  .check-sec-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+  .check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px;}
+  .ci{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:5px;cursor:pointer;}
+  .ci:hover{background:rgba(255,255,255,.03);}
+  .ci input[type=checkbox]{width:15px;height:15px;accent-color:var(--accent);flex-shrink:0;}
+  .ci label{font-size:13px;cursor:pointer;flex:1;}
+  .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:none;transition:all .2s;}
+  .btn-p{background:var(--accent);color:#000;}.btn-p:hover{background:var(--accent2);}
+  .btn-s{background:var(--surface2);color:var(--text);border:1px solid var(--border);}.btn-s:hover{border-color:var(--accent);color:var(--accent);}
+  .btn-sm{padding:5px 11px;font-size:11px;}
+  .btn-d{background:rgba(231,76,60,.15);color:var(--red);border:1px solid rgba(231,76,60,.3);}.btn-d:hover{background:rgba(231,76,60,.25);}
+  .fbar{display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .fbar input,.fbar select{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:7px 11px;font-family:'Barlow',sans-serif;font-size:13px;}
+  .fbar input:focus,.fbar select:focus{outline:none;border-color:var(--accent);}
+  .fbar input{flex:1;min-width:160px;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  @media(max-width:900px){.two-col{grid-template-columns:1fr;}}
+  .msg{padding:9px 13px;border-radius:6px;font-size:13px;margin-bottom:12px;}
+  .msg.success{background:rgba(46,204,113,.12);color:var(--green);border:1px solid rgba(46,204,113,.25);}
+  .msg.error{background:rgba(231,76,60,.12);color:var(--red);border:1px solid rgba(231,76,60,.3);}
+  .tw{overflow-x:auto;}
+  .tw table{min-width:650px;}
+  /* Timeline */
+  .tl-item{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid rgba(42,48,72,.4);}
+  .tl-item:last-child{border-bottom:none;}
+  .tl-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:2px;}
+  .tl-dot.breakdown{background:rgba(231,76,60,.15);}
+  .tl-dot.scheduled{background:rgba(61,139,205,.15);}
+  .tl-dot.inspection{background:rgba(200,216,240,.1);}
+  .tl-body{flex:1;}
+  .tl-title{font-size:13px;font-weight:600;margin-bottom:3px;}
+  .tl-meta{font-size:12px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;}
+  .tl-notes{font-size:12px;color:var(--snow);margin-top:4px;background:var(--surface2);padding:6px 10px;border-radius:5px;border-left:3px solid var(--accent);}
+  /* Modal */
+  .mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:200;align-items:center;justify-content:center;}
+  .mo.open{display:flex;}
+  .mo-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:26px;max-width:500px;width:90%;max-height:90vh;overflow-y:auto;}
+  .mo-box h3{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;color:var(--accent);}
+  .mo-box input,.mo-box select{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:9px 12px;font-size:13px;margin-bottom:11px;}
+  .mo-box input:focus,.mo-box select:focus{outline:none;border-color:var(--accent);}
+  .mo-btns{display:flex;gap:9px;justify-content:flex-end;margin-top:12px;}
+  /* Locked */
+  .locked{text-align:center;padding:60px 20px;}
+  .locked .lock-icon{font-size:48px;margin-bottom:14px;}
+  .locked h3{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .locked p{color:var(--muted);font-size:14px;margin-bottom:18px;}
+  /* Snack */
+  #snack{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#1a2040;color:var(--text);padding:11px 22px;border-radius:8px;font-size:13px;z-index:999;display:none;border:1px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,.5);}
+  #snack.show{display:block;animation:sUp .25s ease;}
+  @keyframes sUp{from{opacity:0;bottom:6px}to{opacity:1;bottom:22px}}
+  @media(max-width:600px){.top-bar{padding:0 12px;}.main{padding:12px;}.stats-row{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="brand">
+    <div class="brand-icon">PB</div>
+    <div class="brand-text">
+      <h1>PistenBully 400 W</h1>
+      <p>MJSR Operations Portal · Malam Jabba Ski Resort</p>
+    </div>
+  </div>
+  <div class="top-right">
+    <div class="hour-box">
+      <div class="lbl">Hour Meter</div>
+      <div class="val" id="top-hours">—</div>
+    </div>
+    <div class="pill green" id="top-status">Operational</div>
+  </div>
+</div>
+
+<!-- NAV TABS -->
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showTab('dashboard')" data-tab="dashboard">📊 Dashboard</button>
+  <button class="nav-tab" onclick="showTab('submit')" data-tab="submit">📋 Submit Check</button>
+  <button class="nav-tab" onclick="showTab('sublog')" data-tab="sublog">📁 Submission Log</button>
+  <button class="nav-tab" onclick="showTab('maintenance')" data-tab="maintenance">🔧 Maintenance Master</button>
+  <button class="nav-tab" onclick="showTab('timeline')" data-tab="timeline">📖 Maintenance Log</button>
+  <button class="nav-tab" onclick="showTab('config')" data-tab="config">⚙️ Config <span class="bdg" id="due-badge" style="display:none">!</span></button>
+</div>
+
+<div class="main">
+
+<!-- ═══ DASHBOARD ═══════════════════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-dashboard">
+  <div class="sec-hdr"><h2>Operations <span>Dashboard</span></h2>
+    <button class="btn btn-s btn-sm" onclick="loadDashboard()">↻ Refresh</button>
+  </div>
+  <div class="stats-row">
+    <div class="sc a"><div class="sl">Current Hour Meter</div><div class="sv" id="d-hours">—</div><div class="ss">Engine hours</div></div>
+    <div class="sc b"><div class="sl">Operator Checks (30d)</div><div class="sv" id="d-op">—</div></div>
+    <div class="sc g"><div class="sl">Mech Checks (30d)</div><div class="sv" id="d-mc">—</div></div>
+    <div class="sc am"><div class="sl">Fuel Added (30d)</div><div class="sv" id="d-fuel">—</div><div class="ss">Litres</div></div>
+    <div class="sc r"><div class="sl">Maint Items Due/Soon</div><div class="sv" id="d-due">—</div></div>
+    <div class="sc b"><div class="sl">Total Service Records</div><div class="sv" id="d-svc">—</div></div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-hdr"><span>⚙️ Scheduled Maintenance</span></div>
+      <table><thead><tr><th>Task</th><th>Next Due</th><th>Remaining</th><th>Status</th></tr></thead>
+        <tbody id="d-maint-tbl"><tr><td colspan="4" style="text-align:center;color:var(--muted);padding:18px">Loading…</td></tr></tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><span>⚠️ Recent Issues / Notes</span><span style="font-size:11px;color:var(--muted);font-weight:400">Last 10 flagged entries</span></div>
+      <div id="d-issues" style="padding:10px;max-height:260px;overflow-y:auto;"><div style="text-align:center;color:var(--muted);padding:18px;font-size:13px">Loading…</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-hdr"><span>📋 Recent Submissions (Last 7)</span></div>
+    <div class="tw">
+      <table><thead><tr><th>Date</th><th>Type</th><th>Name</th><th>Hour Meter</th><th>Area / Slope</th><th>Fuel (L)</th><th>Notes</th></tr></thead>
+        <tbody id="d-recent"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:18px">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SUBMIT CHECK ════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-submit">
+  <div class="sec-hdr"><h2>Submit <span>Check</span></h2></div>
+  <div class="form-card" style="padding:16px;margin-bottom:14px;">
+    <div style="display:flex;gap:11px;flex-wrap:wrap;">
+      <button class="btn btn-p" id="btn-op" onclick="setType('op')">🎿 Operator Check</button>
+      <button class="btn btn-s" id="btn-mc" onclick="setType('mc')">🔧 Mechanical Check</button>
+    </div>
+  </div>
+
+  <!-- OPERATOR FORM -->
+  <div id="form-op">
+    <div class="form-card">
+      <h3>🎿 Operator Pre-Shift Check</h3>
+      <div id="op-msg"></div>
+      <div class="frow">
+        <div class="fg"><label>Date</label><input type="date" id="op-date"></div>
+        <div class="fg"><label>Operator Name</label><input type="text" id="op-name" placeholder="Full name"></div>
+        <div class="fg"><label>Shift</label>
+          <select id="op-shift">
+            <option value="Day Shift ( Sunrise to sunset)">Day Shift (Sunrise to Sunset)</option>
+            <option value="Night Shift ( Sunset to Sunrise)">Night Shift (Sunset to Sunrise)</option>
+          </select>
+        </div>
+        <div class="fg"><label>Planned Work Area / Slope</label><input type="text" id="op-area" placeholder="e.g. Beginners Slope, Main Slope"></div>
+        <div class="fg"><label>Current Hour Meter</label><input type="number" id="op-hours" placeholder="e.g. 7135" step="0.1"></div>
+        <div class="fg"><label>Fuel Added (Litres)</label><input type="number" id="op-fuel" placeholder="0" step="1" value="0"></div>
+      </div>
+
+      <!-- Individual checks grouped -->
+      <div class="check-sec">
+        <div class="check-sec-title">💧 Fluid Levels &amp; Engine</div>
+        <div class="check-grid">
+          <div class="ci"><input type="checkbox" id="op-engOil"><label for="op-engOil">Engine Oil Level OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-hydFluid"><label for="op-hydFluid">Hydraulic Fluid Level OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-coolant"><label for="op-coolant">Coolant Level OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-engStart"><label for="op-engStart">Engine Start OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-lights"><label for="op-lights">All Lights Working?</label></div>
+        </div>
+      </div>
+      <div class="check-sec">
+        <div class="check-sec-title">🔩 Blade</div>
+        <div class="check-grid">
+          <div class="ci"><input type="checkbox" id="op-blade3pt"><label for="op-blade3pt">Blade 3-Point Link OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-bladeHoses"><label for="op-bladeHoses">Blade Hoses OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-bladeCyl"><label for="op-bladeCyl">Blade Cylinders OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-bladePins"><label for="op-bladePins">Blade Big Pins &amp; Nuts OK?</label></div>
+        </div>
+      </div>
+      <div class="check-sec">
+        <div class="check-sec-title">🔗 Left Track</div>
+        <div class="check-grid">
+          <div class="ci"><input type="checkbox" id="op-ltTension"><label for="op-ltTension">Left Track Tension OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-ltGrousers"><label for="op-ltGrousers">Left Track Grousers — Any Damage?</label></div>
+          <div class="ci"><input type="checkbox" id="op-ltSprocket"><label for="op-ltSprocket">Left Track Sprocket OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-ltSpBolts"><label for="op-ltSpBolts">Left Sprocket Bolts OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-ltJoin"><label for="op-ltJoin">Left Track Join Bolts &amp; Plates OK?</label></div>
+        </div>
+      </div>
+      <div class="check-sec">
+        <div class="check-sec-title">⚙️ Tiller</div>
+        <div class="check-grid">
+          <div class="ci"><input type="checkbox" id="op-tillerPins"><label for="op-tillerPins">Tiller Lifting Frame Large Pins OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-tillerHoses"><label for="op-tillerHoses">Tiller Hoses OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-tillerCyl"><label for="op-tillerCyl">Tiller Cylinders OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-tillerPNuts"><label for="op-tillerPNuts">Tiller Pins &amp; Nuts OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-tillerFin"><label for="op-tillerFin">Tiller Finisher Mats OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-tillerCut"><label for="op-tillerCut">Tiller Cutter Bar OK?</label></div>
+        </div>
+      </div>
+      <div class="check-sec">
+        <div class="check-sec-title">🔗 Right Track</div>
+        <div class="check-grid">
+          <div class="ci"><input type="checkbox" id="op-rtTension"><label for="op-rtTension">Right Track Tension OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-rtGrousers"><label for="op-rtGrousers">Right Track Grousers — Any Damage?</label></div>
+          <div class="ci"><input type="checkbox" id="op-rtSprocket"><label for="op-rtSprocket">Right Track Sprocket OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-rtSpBolts"><label for="op-rtSpBolts">Right Sprocket Bolts OK?</label></div>
+          <div class="ci"><input type="checkbox" id="op-rtJoin"><label for="op-rtJoin">Right Track Join Bolts &amp; Plates OK?</label></div>
+        </div>
+      </div>
+      <div class="check-sec">
+        <div class="check-sec-title">🚗 Cab / General</div>
+        <div class="check-grid">
+          <div class="ci"><input type="checkbox" id="op-cabinDmg"><label for="op-cabinDmg">Cabin Damage?</label></div>
+          <div class="ci"><input type="checkbox" id="op-fireExt"><label for="op-fireExt">Fire Extinguisher in Machine?</label></div>
+          <div class="ci"><input type="checkbox" id="op-leaks"><label for="op-leaks">Any Leaks Under Machine?</label></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:9px;margin-top:6px;margin-bottom:12px;">
+        <button class="btn btn-s btn-sm" onclick="selectAll('form-op')">✓ Select All</button>
+        <button class="btn btn-s btn-sm" onclick="clearAll('form-op')">✗ Clear All</button>
+      </div>
+      <div class="fg"><label>Issues / Notes</label><textarea id="op-notes" placeholder="Any faults, observations or issues worth noting…"></textarea></div>
+      <div style="display:flex;gap:9px;margin-top:14px;">
+        <button class="btn btn-p" onclick="submitOp()">✓ Submit Operator Check</button>
+        <button class="btn btn-s" onclick="clearOpForm()">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MECHANICAL FORM -->
+  <div id="form-mc" style="display:none">
+    <div class="form-card">
+      <h3>🔧 Mechanical Inspection Check</h3>
+      <div id="mc-msg"></div>
+      <div class="frow">
+        <div class="fg"><label>Date</label><input type="date" id="mc-date"></div>
+        <div class="fg"><label>Mechanic Name</label><input type="text" id="mc-name" placeholder="Full name"></div>
+        <div class="fg"><label>Current Hour Meter</label><input type="number" id="mc-hours" placeholder="e.g. 7135" step="0.1"></div>
+        <div class="fg"><label>Diesel Added (Litres)</label><input type="number" id="mc-diesel" placeholder="0" step="1" value="0"></div>
+      </div>
+      <div class="check-sec">
+        <div class="check-sec-title">💧 Fluid Levels</div>
+        <div class="frow" style="margin-bottom:0">
+          <div class="fg"><label>Engine Oil Level</label><select id="mc-engOil"><option>Full</option><option>Half</option><option>Low</option><option>Critical</option></select></div>
+          <div class="fg"><label>Hydraulic Oil Level</label><select id="mc-hydOil"><option>Full</option><option>Half</option><option>Low</option><option>Critical</option></select></div>
+          <div class="fg"><label>Coolant Level</label><select id="mc-coolant"><option>Full</option><option>Half</option><option>Low</option><option>Critical</option></select></div>
+        </div>
+      </div>
+      <div class="check-sec">
+        <div class="check-sec-title">🔩 Blade Checks</div>
+        <div class="check-grid">
+          <div class="ci"><input type="checkbox" id="mc-bCutterTeeth"><label for="mc-bCutterTeeth">Cutter Teeth OK?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-bWings"><label for="mc-bWings">Wings Open/Close Function?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-bUpDown"><label for="mc-bUpDown">Up/Down Function?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-bTiltLR"><label for="mc-bTiltLR">Left/Right Tilt?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-bSlewLR"><label for="mc-bSlewLR">Left/Right Slew?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-bSwingerBolts"><label for="mc-bSwingerBolts">Swinger Bolts Tight?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-bFramePins"><label for="mc-bFramePins">Frame Pins &amp; Nuts Tight?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-bCylPins"><label for="mc-bCylPins">Cylinder Pins &amp; Nuts Tight?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-bCylLeak"><label for="mc-bCylLeak">Cylinders Leaking?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-bHoses"><label for="mc-bHoses">Hoses Secure, No Leaks?</label></div>
+        </div>
+      </div>
+      <div class="check-sec">
+        <div class="check-sec-title">🔗 Left Track Checks</div>
+        <div class="check-grid">
+          <div class="ci"><input type="checkbox" id="mc-ltTension"><label for="mc-ltTension">Tension Test OK?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-ltGrouser"><label for="mc-ltGrouser">Grouser Damage?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-ltCleats"><label for="mc-ltCleats">Cleats Loose?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-ltBelts"><label for="mc-ltBelts">Track Belts OK?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-ltJoin"><label for="mc-ltJoin">Join Bolts/Nuts/Plates OK?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-ltTWNuts"><label for="mc-ltTWNuts">Tension Wheel Nuts Tight?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-ltGuider"><label for="mc-ltGuider">Guider Wheel Bolts Tight?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-ltSpTeeth"><label for="mc-ltSpTeeth">Sprocket Teeth Damage?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-ltSpBolts"><label for="mc-ltSpBolts">Sprocket Bolts Tight?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-ltSpOil"><label for="mc-ltSpOil">Sprocket Gear Oil Level OK?</label></div>
+        </div>
+      </div>
+      <div class="check-sec">
+        <div class="check-sec-title">🔗 Right Track Checks</div>
+        <div class="check-grid">
+          <div class="ci"><input type="checkbox" id="mc-rtTension"><label for="mc-rtTension">Tension Test OK?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-rtGrouser"><label for="mc-rtGrouser">Grouser Damage?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-rtCleats"><label for="mc-rtCleats">Cleats Loose?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-rtBelts"><label for="mc-rtBelts">Track Belts OK?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-rtJoin"><label for="mc-rtJoin">Join Bolts/Nuts/Plates OK?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-rtTWNuts"><label for="mc-rtTWNuts">Tension Wheel Nuts Tight?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-rtGuider"><label for="mc-rtGuider">Guider Wheel Bolts Tight?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-rtSpTeeth"><label for="mc-rtSpTeeth">Sprocket Teeth Damage?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-rtSpBolts"><label for="mc-rtSpBolts">Sprocket Bolts Tight?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-rtSpOil"><label for="mc-rtSpOil">Sprocket Gear Oil Level OK?</label></div>
+        </div>
+      </div>
+      <div class="check-sec">
+        <div class="check-sec-title">⚙️ Tiller Checks</div>
+        <div class="check-grid">
+          <div class="ci"><input type="checkbox" id="mc-tilLiftsUp"><label for="mc-tilLiftsUp">Lifts Up OK?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-tilGoesDown"><label for="mc-tilGoesDown">Goes Down OK?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-tilSlewL"><label for="mc-tilSlewL">Slews Left?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-tilSlewR"><label for="mc-tilSlewR">Slews Right?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-tilCutChange"><label for="mc-tilCutChange">Cut Change Function?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-tilTurnTest"><label for="mc-tilTurnTest">⚠️ Turn Test (tiller off ground!)?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-tilSwingBolts"><label for="mc-tilSwingBolts">Swing Bolts Tight (Loctite if loose)?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-tilFrameDmg"><label for="mc-tilFrameDmg">Lifting Frames No Visible Damage?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-tilFrameBolts"><label for="mc-tilFrameBolts">Lifting Frame Large Bolts Secure?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-tilHoses"><label for="mc-tilHoses">Hoses Secure, No Leaks?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-tilCylBolts"><label for="mc-tilCylBolts">Cylinder Bolts &amp; Nuts (White Marker)?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-tilFinMats"><label for="mc-tilFinMats">Finisher Mats Cracks/Damage?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-tilBox"><label for="mc-tilBox">Tiller Box Damage?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-tilSideFin"><label for="mc-tilSideFin">Side Finishers OK?</label></div>
+        </div>
+      </div>
+      <div class="check-sec">
+        <div class="check-sec-title">🚗 Cab Checks</div>
+        <div class="check-grid">
+          <div class="ci"><input type="checkbox" id="mc-cabTrash"><label for="mc-cabTrash">Empty Bottles/Trash Removed?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-cabLights"><label for="mc-cabLights">All Light Buttons Working?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-cabWindscreen"><label for="mc-cabWindscreen">Windscreen OK?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-cabWipers"><label for="mc-cabWipers">Wipers Working (Front &amp; Rear)?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-cabHorn"><label for="mc-cabHorn">Horn Working?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-cabFwd"><label for="mc-cabFwd">Forward Movement OK?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-cabBack"><label for="mc-cabBack">Backward Movement OK?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-cabParkBrake"><label for="mc-cabParkBrake">Park Brake Test?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-cabDoorBuzz"><label for="mc-cabDoorBuzz">Driver Door Buzzer / Park Brake Interlock?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-cabWindows"><label for="mc-cabWindows">All Windows &amp; Roof Window Closed?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-cabDoors"><label for="mc-cabDoors">Doors Closed?</label></div>
+          <div class="ci"><input type="checkbox" id="mc-cabFireExt"><label for="mc-cabFireExt">Fire Extinguisher In Place, Not Expired?</label></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:9px;margin-top:6px;margin-bottom:12px;">
+        <button class="btn btn-s btn-sm" onclick="selectAll('form-mc')">✓ Select All</button>
+        <button class="btn btn-s btn-sm" onclick="clearAll('form-mc')">✗ Clear All</button>
+      </div>
+      <div class="fg"><label>Notes / Findings</label><textarea id="mc-notes" placeholder="Faults found, parts replaced, work performed…"></textarea></div>
+      <div style="display:flex;gap:9px;margin-top:14px;">
+        <button class="btn btn-p" onclick="submitMC()">✓ Submit Mechanical Check</button>
+        <button class="btn btn-s" onclick="clearMCForm()">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SUBMISSION LOG ═══════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-sublog">
+  <div class="sec-hdr"><h2>Submission <span>Log</span></h2>
+    <button class="btn btn-s btn-sm" onclick="loadSubLog()">↻ Refresh</button>
+  </div>
+  <div class="fbar">
+    <input type="text" id="sl-q" placeholder="Search name, notes, area…" oninput="filterSL()">
+    <select id="sl-type" onchange="filterSL()"><option value="">All Types</option><option>Operator</option><option>Mechanical</option></select>
+    <input type="date" id="sl-from" onchange="filterSL()">
+    <input type="date" id="sl-to" onchange="filterSL()">
+    <button class="btn btn-s btn-sm" onclick="clearSLFilters()">Clear</button>
+  </div>
+  <div class="card"><div class="tw">
+    <table><thead><tr><th>Date</th><th>Type</th><th>Name</th><th>Hour Meter</th><th>Area / Slope</th><th>Fuel (L)</th><th>Notes</th></tr></thead>
+      <tbody id="sl-body"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:22px">Loading…</td></tr></tbody>
+    </table>
+  </div></div>
+</div>
+
+<!-- ═══ MAINTENANCE MASTER ══════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-maintenance">
+  <div class="sec-hdr"><h2>Maintenance <span>Master</span></h2>
+    <div style="display:flex;gap:9px;">
+      <button class="btn btn-s btn-sm" onclick="loadMaintMaster()">↻ Refresh</button>
+      <button class="btn btn-p btn-sm" onclick="openNewMaint()">+ Add Record</button>
+    </div>
+  </div>
+  <div class="stats-row" style="margin-bottom:14px;">
+    <div class="sc b"><div class="sl">Total Records</div><div class="sv" id="mm-total">—</div></div>
+    <div class="sc r"><div class="sl">Breakdowns</div><div class="sv" id="mm-bd">—</div></div>
+    <div class="sc a"><div class="sl">Scheduled</div><div class="sv" id="mm-sc">—</div></div>
+    <div class="sc am"><div class="sl">With Follow-up</div><div class="sv" id="mm-fu">—</div></div>
+    <div class="sc g"><div class="sl">Total Downtime</div><div class="sv" id="mm-dt">—</div><div class="ss">Hours</div></div>
+  </div>
+  <div class="fbar">
+    <input type="text" id="mm-q" placeholder="Search description, category…" oninput="filterMM()">
+    <select id="mm-season" onchange="filterMM()"><option value="">All Seasons</option><option>Winter</option><option>Summer</option></select>
+    <select id="mm-type" onchange="filterMM()"><option value="">All Types</option><option value="Scheduled / Preventive">Scheduled</option><option value="Breakdown / Repair">Breakdown</option><option value="Inspection Only">Inspection</option></select>
+    <select id="mm-cat" onchange="filterMM()">
+      <option value="">All Categories</option>
+      <option>Engine</option><option>Hydraulics</option>
+      <option value="Undercarriage / Wheels / Tracks">Undercarriage / Tracks</option>
+      <option>Electrical</option><option>Cooling System</option>
+      <option>Transmission / Drive</option><option value="Snow Blade / Attachments">Blade</option><option>Other</option>
+    </select>
+    <select id="mm-status" onchange="filterMM()"><option value="">All Statuses</option><option value="Fully Operational">Fully Operational</option><option value="Operational with observation">With Observation</option><option value="Not cleared for use">Not Cleared</option></select>
+    <button class="btn btn-s btn-sm" onclick="clearMMFilters()">Clear</button>
+  </div>
+  <div class="card"><div class="tw">
+    <table><thead><tr><th>#</th><th>Date</th><th>Season</th><th>Category</th><th>Type</th><th>Hours</th><th>Work Summary</th><th>Parts</th><th>By</th><th>Downtime</th><th>Status</th></tr></thead>
+      <tbody id="mm-body"><tr><td colspan="11" style="text-align:center;color:var(--muted);padding:22px">Loading…</td></tr></tbody>
+    </table>
+  </div></div>
+</div>
+
+<!-- ═══ MAINTENANCE TIMELINE ════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-timeline">
+  <div class="sec-hdr"><h2>Maintenance <span>Timeline</span></h2>
+    <button class="btn btn-s btn-sm" onclick="loadTimeline()">↻ Refresh</button>
+  </div>
+  <div class="fbar">
+    <select id="tl-season" onchange="filterTL()"><option value="">All Seasons</option><option>Winter</option><option>Summer</option></select>
+    <select id="tl-type" onchange="filterTL()"><option value="">All Types</option><option value="Scheduled / Preventive">Scheduled</option><option value="Breakdown / Repair">Breakdown</option><option value="Inspection Only">Inspection</option></select>
+    <input type="date" id="tl-from" onchange="filterTL()">
+    <input type="date" id="tl-to" onchange="filterTL()">
+  </div>
+  <div id="tl-wrap" style="max-width:820px">
+    <div style="text-align:center;color:var(--muted);padding:40px">Loading timeline…</div>
+  </div>
+</div>
+
+<!-- ═══ CONFIG (PIN-LOCKED) ═════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-config">
+  <div id="cfg-locked">
+    <div class="locked">
+      <div class="lock-icon">🔒</div>
+      <h3>Maintenance Configuration</h3>
+      <p>SNR Technical Manager / GM access only.</p>
+      <button class="btn btn-p" onclick="openPIN()">Enter PIN</button>
+    </div>
+  </div>
+  <div id="cfg-unlocked" style="display:none">
+    <div class="sec-hdr">
+      <h2>Maintenance <span>Configuration</span></h2>
+      <div style="display:flex;gap:9px;">
+        <button class="btn btn-p btn-sm" onclick="showAddTask()">+ Add Task</button>
+        <button class="btn btn-d btn-sm" onclick="lockCfg()">🔒 Lock</button>
+      </div>
+    </div>
+    <div id="cfg-msg"></div>
+    <!-- Add task form (hidden by default) -->
+    <div class="form-card" id="add-task-form" style="display:none;margin-bottom:16px;">
+      <h3>+ New Maintenance Task</h3>
+      <div class="frow">
+        <div class="fg"><label>Task Name</label><input type="text" id="cfg-name" placeholder="e.g. Engine Oil Change"></div>
+        <div class="fg"><label>Interval (Hours)</label><input type="number" id="cfg-interval" placeholder="250"></div>
+        <div class="fg"><label>Last Done At (Hours)</label><input type="number" id="cfg-lastdone" placeholder="7135"></div>
+        <div class="fg"><label>Notify Before (Hours)</label><input type="number" id="cfg-notify" placeholder="20"></div>
+        <div class="fg"><label>Assigned To</label><input type="text" id="cfg-assigned" placeholder="Workshop"></div>
+        <div class="fg"><label>Notes</label><input type="text" id="cfg-notes" placeholder="Optional"></div>
+      </div>
+      <div style="display:flex;gap:9px;">
+        <button class="btn btn-p" onclick="addConfigTask()">Save Task</button>
+        <button class="btn btn-s" onclick="hideAddTask()">Cancel</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><span>⚙️ Scheduled Maintenance Tasks</span></div>
+      <div class="tw">
+        <table><thead><tr><th>Active</th><th>Task Name</th><th>Interval</th><th>Last Done</th><th>Next Due</th><th>Notify Before</th><th>Assigned To</th><th>Remaining</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="cfg-body"><tr><td colspan="10" style="text-align:center;color:var(--muted);padding:20px">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- PIN MODAL -->
+<div class="mo" id="pin-mo">
+  <div class="mo-box">
+    <h3>🔒 Enter PIN</h3>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:12px">SNR Technical Manager / GM access required.</p>
+    <input type="password" id="pin-input" placeholder="Enter PIN" onkeydown="if(event.key==='Enter')checkPIN()">
+    <div id="pin-err" style="color:var(--red);font-size:12px;margin-bottom:8px;display:none">Incorrect PIN.</div>
+    <div class="mo-btns">
+      <button class="btn btn-s" onclick="closePIN()">Cancel</button>
+      <button class="btn btn-p" onclick="checkPIN()">Unlock</button>
+    </div>
+  </div>
+</div>
+
+<!-- NEW MAINTENANCE RECORD MODAL -->
+<div class="mo" id="maint-mo">
+  <div class="mo-box" style="max-width:680px">
+    <h3>+ Add Maintenance / Service Record</h3>
+    <div id="nm-msg"></div>
+    <div class="frow">
+      <div class="fg"><label>Date</label><input type="date" id="nm-date"></div>
+      <div class="fg"><label>Season</label><select id="nm-season"><option>Winter</option><option>Summer</option></select></div>
+      <div class="fg"><label>Machine Hours</label><input type="number" id="nm-hours" placeholder="7135" step="0.1"></div>
+      <div class="fg"><label>Service Type</label>
+        <select id="nm-type"><option>Scheduled / Preventive</option><option>Breakdown / Repair</option><option>Inspection Only</option></select></div>
+      <div class="fg"><label>Category</label>
+        <select id="nm-cat"><option>Engine</option><option>Hydraulics</option><option value="Undercarriage / Wheels / Tracks">Undercarriage / Wheels / Tracks</option><option>Electrical</option><option>Cooling System</option><option>Transmission / Drive</option><option value="Snow Blade / Attachments">Snow Blade / Attachments</option><option>Other</option></select></div>
+      <div class="fg"><label>Labour Type</label>
+        <select id="nm-labour"><option>In-house team</option><option>External mechanic</option><option>Mixed</option><option>PistenBully specialist</option></select></div>
+      <div class="fg"><label>Performed By</label><input type="text" id="nm-by" placeholder="Name"></div>
+      <div class="fg"><label>Verified By</label><input type="text" id="nm-verified" placeholder="GM / Name"></div>
+      <div class="fg"><label>Downtime (Hours)</label><input type="number" id="nm-downtime" placeholder="0" step="0.5" value="0"></div>
+      <div class="fg"><label>Machine Status After</label>
+        <select id="nm-status"><option>Fully Operational</option><option>Operational with observation</option><option>Not cleared for use</option></select></div>
+    </div>
+    <div class="fg" style="margin-bottom:10px"><label>Reason for Service</label><textarea id="nm-reason" placeholder="Why was this service needed?" style="min-height:55px"></textarea></div>
+    <div class="fg" style="margin-bottom:10px"><label>Work Description</label><textarea id="nm-work" placeholder="Describe work performed in detail…" style="min-height:65px"></textarea></div>
+    <div class="frow">
+      <div class="fg"><label>Parts Replaced?</label><select id="nm-pyn"><option value="No">No</option><option value="Yes">Yes</option></select></div>
+      <div class="fg"><label>Parts Details</label><input type="text" id="nm-pdetail" placeholder="Part names / numbers"></div>
+      <div class="fg"><label>Parts Source</label><select id="nm-psrc"><option>In-house stock</option><option>Pistenbully Order</option><option>Local vendor</option><option>Other see notes</option></select></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>Follow-up Required?</label><select id="nm-fyn"><option value="No">No</option><option value="Yes">Yes</option></select></div>
+      <div class="fg"><label>Follow-up Notes</label><input type="text" id="nm-fnotes" placeholder="If yes, describe…"></div>
+    </div>
+    <div class="mo-btns">
+      <button class="btn btn-s" onclick="closeMaintMo()">Cancel</button>
+      <button class="btn btn-p" onclick="submitNewMaint()">Save Record</button>
+    </div>
+  </div>
+</div>
+
+<div id="snack"></div>
+
+<script>
+// ─── CONFIG ───────────────────────────────────────────────────────────────
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxQuyK_UEsPfl28KcZBV7H2aDJtpqaP0EE2J5ZFI_5BT0JGR-u0E3qqrqg_vr1544ViGg/exec';
+const PIN = '1234';
+
+// ─── STATE ────────────────────────────────────────────────────────────────
+let allSL = [], allMM = [], allTL = [], cfgUnlocked = false;
+
+// ─── INIT ─────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const today = new Date().toISOString().split('T')[0];
+  ['op-date','mc-date','nm-date'].forEach(id => { const el = document.getElementById(id); if(el) el.value = today; });
+  loadDashboard();
+});
+
+// ─── TAB ──────────────────────────────────────────────────────────────────
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  document.querySelector(`[data-tab="${name}"]`).classList.add('active');
+  if (name === 'dashboard')   loadDashboard();
+  if (name === 'sublog')      loadSubLog();
+  if (name === 'maintenance') loadMaintMaster();
+  if (name === 'timeline')    loadTimeline();
+  if (name === 'config' && cfgUnlocked) loadCfgTasks();
+}
+
+// ─── API ──────────────────────────────────────────────────────────────────
+async function api(action, data={}) {
+  const res = await fetch(SCRIPT_URL, {
+    method:'POST', headers:{'Content-Type':'text/plain'},
+    body: JSON.stringify({action, ...data})
+  });
+  return res.json();
+}
+
+// ─── DASHBOARD ────────────────────────────────────────────────────────────
+async function loadDashboard() {
+  try {
+    const r = await api('getDashboard');
+    if (!r.success) { snack('Dashboard error'); return; }
+    const d = r.data;
+    document.getElementById('top-hours').textContent = d.currentHours || '—';
+    document.getElementById('d-hours').textContent = d.currentHours || '—';
+    document.getElementById('d-op').textContent = d.opChecks30d ?? '—';
+    document.getElementById('d-mc').textContent = d.mechChecks30d ?? '—';
+    document.getElementById('d-fuel').textContent = d.fuel30d ?? '—';
+    document.getElementById('d-due').textContent = d.maintDue ?? '—';
+    document.getElementById('d-svc').textContent = d.totalService ?? '—';
+
+    // Badge
+    if (d.maintDue > 0) { document.getElementById('due-badge').style.display = ''; document.getElementById('due-badge').textContent = d.maintDue; }
+
+    // Maint table
+    const mt = document.getElementById('d-maint-tbl');
+    if (d.maintTasks && d.maintTasks.length) {
+      mt.innerHTML = d.maintTasks.map(t => {
+        const pct = Math.max(0, Math.min(100, 100 - (t.remaining / (t.interval||1) * 100)));
+        const col = t.status==='DUE'?'#e74c3c':t.status==='SOON'?'#f39c12':'#2ecc71';
+        return `<tr>
+          <td style="font-weight:600;font-size:13px">${t.name}</td>
+          <td>${t.nextDue} hrs</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:7px">
+              <div class="prog-wrap"><div class="prog-fill" style="width:${pct}%;background:${col}"></div></div>
+              <span style="font-size:12px;color:${col}">${t.remaining>=0?'+':''}${t.remaining} hrs</span>
+            </div>
+          </td>
+          <td><span class="badge ${t.status.toLowerCase()}">${t.status}</span></td>
+        </tr>`;
+      }).join('');
+    } else { mt.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted)">No tasks configured</td></tr>'; }
+
+    // Issues
+    const iss = document.getElementById('d-issues');
+    if (d.recentIssues && d.recentIssues.length) {
+      iss.innerHTML = d.recentIssues.map(i => `
+        <div style="padding:7px 0;border-bottom:1px solid rgba(42,48,72,.35);">
+          <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
+            <span style="font-size:12px;font-weight:600">${i.date} &nbsp;·&nbsp; <span style="color:var(--muted)">${i.name||'—'}</span></span>
+            <span class="badge ${i.source==='Operator'?'inspection':'scheduled'}">${i.source}</span>
+          </div>
+          <div style="font-size:12px;color:var(--snow)">${i.notes}</div>
+        </div>`).join('');
+    } else { iss.innerHTML = '<div style="text-align:center;color:var(--muted);padding:18px;font-size:13px">No recent issues</div>'; }
+
+    // Recent log
+    const rl = document.getElementById('d-recent');
+    if (d.recentLog && d.recentLog.length) {
+      rl.innerHTML = d.recentLog.map(r => `<tr>
+        <td>${r.date}</td>
+        <td><span class="badge ${r.source==='Operator'?'inspection':'scheduled'}">${r.source}</span></td>
+        <td>${r.name||'—'}</td>
+        <td style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700">${r.hours||'—'}</td>
+        <td style="color:var(--muted);font-size:12px">${r.area||'—'}</td>
+        <td>${r.fuel!=null?r.fuel+'L':'—'}</td>
+        <td style="font-size:12px;max-width:220px">${r.notes||'—'}</td>
+      </tr>`).join('');
+    } else { rl.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:18px">No recent submissions</td></tr>'; }
+  } catch(e) { snack('Could not connect to backend'); }
+}
+
+// ─── SUBMISSION LOG ───────────────────────────────────────────────────────
+async function loadSubLog() {
+  document.getElementById('sl-body').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">Loading…</td></tr>';
+  try {
+    const r = await api('getMasterLog');
+    if (!r.success) return;
+    allSL = r.data || [];
+    renderSL(allSL);
+  } catch(e) {}
+}
+function renderSL(data) {
+  const tb = document.getElementById('sl-body');
+  if (!data.length) { tb.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">No records</td></tr>'; return; }
+  tb.innerHTML = data.map(r => `<tr>
+    <td>${r.date||'—'}</td>
+    <td><span class="badge ${r.source==='Operator'?'inspection':'scheduled'}">${r.source||'—'}</span></td>
+    <td>${r.name||'—'}</td>
+    <td style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700">${r.hours||'—'}</td>
+    <td style="font-size:12px;color:var(--muted)">${r.area||'—'}</td>
+    <td>${r.fuel!=null?r.fuel+'L':'—'}</td>
+    <td style="font-size:12px;max-width:230px">${r.notes||'—'}</td>
+  </tr>`).join('');
+}
+function filterSL() {
+  const q = document.getElementById('sl-q').value.toLowerCase();
+  const type = document.getElementById('sl-type').value;
+  const from = document.getElementById('sl-from').value;
+  const to   = document.getElementById('sl-to').value;
+  renderSL(allSL.filter(r => {
+    if (type && r.source !== type) return false;
+    if (from && r.date < from) return false;
+    if (to && r.date > to) return false;
+    if (q && !JSON.stringify(r).toLowerCase().includes(q)) return false;
+    return true;
+  }));
+}
+function clearSLFilters() {
+  ['sl-q','sl-from','sl-to'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('sl-type').value='';
+  renderSL(allSL);
+}
+
+// ─── MAINTENANCE MASTER ───────────────────────────────────────────────────
+async function loadMaintMaster() {
+  document.getElementById('mm-body').innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:22px">Loading…</td></tr>';
+  try {
+    const r = await api('getMaintMaster');
+    if (!r.success) return;
+    allMM = r.data || [];
+    renderMM(allMM);
+    updateMMStats(allMM);
+  } catch(e) {}
+}
+function renderMM(data) {
+  const tb = document.getElementById('mm-body');
+  if (!data.length) { tb.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:22px">No records</td></tr>'; return; }
+  tb.innerHTML = data.map((r,i) => {
+    const tc = r.type&&r.type.includes('Breakdown')?'breakdown':r.type&&r.type.includes('Scheduled')?'scheduled':'inspection';
+    const sc = r.status&&r.status.includes('observation')?'observation':r.status&&r.status.includes('Not')?'notcleared':'operational';
+    const shortT = r.type?r.type.includes('Breakdown')?'Breakdown':r.type.includes('Scheduled')?'Scheduled':'Inspection':'—';
+    const shortS = r.status?r.status.includes('observation')?'Observation':r.status.includes('Not')?'Not Cleared':'Operational':'—';
+    return `<tr>
+      <td style="color:var(--muted);font-size:11px">${r.id||i+1}</td>
+      <td>${r.date||'—'}</td>
+      <td><span class="badge muted-badge">${r.season||'—'}</span></td>
+      <td style="font-size:12px">${r.category||'—'}</td>
+      <td><span class="badge ${tc}">${shortT}</span></td>
+      <td style="font-family:'Barlow Condensed',sans-serif">${r.hours||'—'}</td>
+      <td style="font-size:12px;max-width:220px">${r.work||r.reason||'—'}</td>
+      <td style="font-size:12px">${r.parts_yn==='Yes'?'✓ '+(r.parts_detail||''):'—'}</td>
+      <td>${r.by||'—'}</td>
+      <td>${r.downtime!=null?r.downtime+'h':'—'}</td>
+      <td><span class="badge ${sc}">${shortS}</span></td>
+    </tr>`;
+  }).join('');
+}
+function updateMMStats(data) {
+  document.getElementById('mm-total').textContent = data.length;
+  document.getElementById('mm-bd').textContent = data.filter(r=>r.type&&r.type.includes('Breakdown')).length;
+  document.getElementById('mm-sc').textContent = data.filter(r=>r.type&&r.type.includes('Scheduled')).length;
+  document.getElementById('mm-fu').textContent = data.filter(r=>r.followup==='Yes').length;
+  document.getElementById('mm-dt').textContent = data.reduce((a,r)=>a+(parseFloat(r.downtime)||0),0);
+}
+function filterMM() {
+  const q = document.getElementById('mm-q').value.toLowerCase();
+  const season = document.getElementById('mm-season').value;
+  const type   = document.getElementById('mm-type').value;
+  const cat    = document.getElementById('mm-cat').value;
+  const status = document.getElementById('mm-status').value;
+  const f = allMM.filter(r => {
+    if (season && r.season !== season) return false;
+    if (type && r.type !== type) return false;
+    if (cat && r.category !== cat) return false;
+    if (status && r.status !== status) return false;
+    if (q && !JSON.stringify(r).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  renderMM(f); updateMMStats(f);
+}
+function clearMMFilters() {
+  ['mm-q'].forEach(id=>document.getElementById(id).value='');
+  ['mm-season','mm-type','mm-cat','mm-status'].forEach(id=>document.getElementById(id).value='');
+  renderMM(allMM); updateMMStats(allMM);
+}
+
+// ─── TIMELINE ─────────────────────────────────────────────────────────────
+async function loadTimeline() {
+  document.getElementById('tl-wrap').innerHTML = '<div style="text-align:center;color:var(--muted);padding:40px">Loading…</div>';
+  try {
+    const r = await api('getMaintMaster');
+    if (!r.success) return;
+    allTL = (r.data||[]).sort((a,b)=>new Date(b.date)-new Date(a.date));
+    renderTL(allTL);
+  } catch(e) {}
+}
+function renderTL(data) {
+  const season = document.getElementById('tl-season').value;
+  const type   = document.getElementById('tl-type').value;
+  const from   = document.getElementById('tl-from').value;
+  const to     = document.getElementById('tl-to').value;
+  const f = data.filter(r => {
+    if (season && r.season !== season) return false;
+    if (type && r.type !== type) return false;
+    if (from && r.date < from) return false;
+    if (to && r.date > to) return false;
+    return true;
+  });
+  const el = document.getElementById('tl-wrap');
+  if (!f.length) { el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:40px">No records match filter</div>'; return; }
+  el.innerHTML = f.map(r => {
+    const isB = r.type&&r.type.includes('Breakdown');
+    const isS = r.type&&r.type.includes('Scheduled');
+    const dc = isB?'breakdown':isS?'scheduled':'inspection';
+    const em = isB?'🔴':isS?'🔵':'⚪';
+    return `<div class="tl-item">
+      <div class="tl-dot ${dc}">${em}</div>
+      <div class="tl-body">
+        <div class="tl-title">${r.category||'General'} — ${r.type?r.type.includes('Breakdown')?'Breakdown':r.type.includes('Scheduled')?'Scheduled':'Inspection':'—'}</div>
+        <div class="tl-meta">
+          <span>📅 ${r.date||'—'}</span>
+          <span>⏱ ${r.hours||'—'} hrs</span>
+          <span>🏔 ${r.season||'—'}</span>
+          ${r.by?`<span>👤 ${r.by}</span>`:''}
+          ${r.downtime?`<span>⏳ ${r.downtime}h downtime</span>`:''}
+        </div>
+        ${r.work||r.reason?`<div class="tl-notes">${r.work||r.reason}</div>`:''}
+        ${r.parts_yn==='Yes'&&r.parts_detail?`<div style="font-size:11px;color:var(--amber);margin-top:3px">🔩 Parts: ${r.parts_detail}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function filterTL() { renderTL(allTL); }
+
+// ─── SUBMIT OPERATOR ──────────────────────────────────────────────────────
+function setType(t) {
+  document.getElementById('form-op').style.display = t==='op'?'':'none';
+  document.getElementById('form-mc').style.display = t==='mc'?'':'none';
+  document.getElementById('btn-op').className = t==='op'?'btn btn-p':'btn btn-s';
+  document.getElementById('btn-mc').className = t==='mc'?'btn btn-p':'btn btn-s';
+}
+
+// Collect all checkbox values within a container as {id → bool}
+function collectChecks(containerId, prefix) {
+  const obj = {};
+  document.querySelectorAll(`#${containerId} input[type=checkbox]`).forEach(cb => {
+    const key = cb.id.replace(prefix+'-','');
+    obj[key] = cb.checked;
+  });
+  return obj;
+}
+
+function selectAll(containerId) {
+  document.querySelectorAll(`#${containerId} input[type=checkbox]`).forEach(cb => cb.checked = true);
+}
+function clearAll(containerId) {
+  document.querySelectorAll(`#${containerId} input[type=checkbox]`).forEach(cb => cb.checked = false);
+}
+
+async function submitOp() {
+  const msgEl = document.getElementById('op-msg');
+  msgEl.className='msg'; msgEl.textContent='';
+  const date  = document.getElementById('op-date').value;
+  const name  = document.getElementById('op-name').value.trim();
+  const hours = document.getElementById('op-hours').value;
+  if (!date||!name||!hours) { msgEl.textContent='Date, Name and Hour Meter are required.'; msgEl.className='msg error'; return; }
+  // Collect all individual checkbox keys from form-op
+  const checks = collectChecks('form-op','op');
+  const payload = {
+    date, name,
+    shift: document.getElementById('op-shift').value,
+    area: document.getElementById('op-area').value.trim(),
+    hours, fuel: document.getElementById('op-fuel').value,
+    notes: document.getElementById('op-notes').value.trim(),
+    ...checks
+  };
+  try {
+    const r = await api('submitOperatorCheck', payload);
+    if (r.success) { msgEl.textContent='✓ Operator check submitted.'; msgEl.className='msg success'; snack('✓ Operator check submitted!'); clearOpForm(); }
+    else { msgEl.textContent='Error: '+(r.error||'Unknown'); msgEl.className='msg error'; }
+  } catch(e) { msgEl.textContent='Connection error.'; msgEl.className='msg error'; }
+}
+
+async function submitMC() {
+  const msgEl = document.getElementById('mc-msg');
+  msgEl.className='msg'; msgEl.textContent='';
+  const date  = document.getElementById('mc-date').value;
+  const name  = document.getElementById('mc-name').value.trim();
+  const hours = document.getElementById('mc-hours').value;
+  if (!date||!name||!hours) { msgEl.textContent='Date, Name and Hour Meter are required.'; msgEl.className='msg error'; return; }
+  const checks = collectChecks('form-mc','mc');
+  const payload = {
+    date, name, hours,
+    diesel: document.getElementById('mc-diesel').value,
+    engOil: document.getElementById('mc-engOil').value,
+    hydOil: document.getElementById('mc-hydOil').value,
+    coolant: document.getElementById('mc-coolant').value,
+    notes: document.getElementById('mc-notes').value.trim(),
+    ...checks
+  };
+  try {
+    const r = await api('submitMechCheck', payload);
+    if (r.success) { msgEl.textContent='✓ Mechanical check submitted.'; msgEl.className='msg success'; snack('✓ Mechanical check submitted!'); clearMCForm(); }
+    else { msgEl.textContent='Error: '+(r.error||'Unknown'); msgEl.className='msg error'; }
+  } catch(e) { msgEl.textContent='Connection error.'; msgEl.className='msg error'; }
+}
+
+function clearOpForm() {
+  ['op-name','op-area','op-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('op-fuel').value='0';
+  clearAll('form-op');
+}
+function clearMCForm() {
+  ['mc-name','mc-hours','mc-diesel','mc-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('mc-diesel').value='0';
+  clearAll('form-mc');
+}
+
+// ─── NEW MAINT RECORD ────────────────────────────────────────────────────
+function openNewMaint() {
+  document.getElementById('nm-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('nm-msg').textContent='';
+  document.getElementById('maint-mo').classList.add('open');
+}
+function closeMaintMo() { document.getElementById('maint-mo').classList.remove('open'); }
+async function submitNewMaint() {
+  const msgEl = document.getElementById('nm-msg');
+  const data = {
+    date: document.getElementById('nm-date').value,
+    season: document.getElementById('nm-season').value,
+    hours: document.getElementById('nm-hours').value,
+    type: document.getElementById('nm-type').value,
+    category: document.getElementById('nm-cat').value,
+    labour: document.getElementById('nm-labour').value,
+    by: document.getElementById('nm-by').value,
+    verified: document.getElementById('nm-verified').value,
+    downtime: document.getElementById('nm-downtime').value,
+    status: document.getElementById('nm-status').value,
+    reason: document.getElementById('nm-reason').value,
+    work: document.getElementById('nm-work').value,
+    parts_yn: document.getElementById('nm-pyn').value,
+    parts_detail: document.getElementById('nm-pdetail').value,
+    parts_src: document.getElementById('nm-psrc').value,
+    followup: document.getElementById('nm-fyn').value,
+    followup_notes: document.getElementById('nm-fnotes').value,
+  };
+  if (!data.date||!data.work) { msgEl.textContent='Date and Work Description required.'; msgEl.className='msg error'; return; }
+  try {
+    const r = await api('addMaintRecord', data);
+    if (r.success) { closeMaintMo(); snack('✓ Maintenance record saved ('+r.id+')'); loadMaintMaster(); }
+    else { msgEl.textContent='Error: '+(r.error||'Unknown'); msgEl.className='msg error'; }
+  } catch(e) { msgEl.textContent='Connection error.'; msgEl.className='msg error'; }
+}
+
+// ─── CONFIG ───────────────────────────────────────────────────────────────
+function openPIN() { document.getElementById('pin-mo').classList.add('open'); document.getElementById('pin-input').value=''; document.getElementById('pin-err').style.display='none'; setTimeout(()=>document.getElementById('pin-input').focus(),200); }
+function closePIN() { document.getElementById('pin-mo').classList.remove('open'); }
+function checkPIN() {
+  if (document.getElementById('pin-input').value === PIN) {
+    closePIN(); cfgUnlocked=true;
+    document.getElementById('cfg-locked').style.display='none';
+    document.getElementById('cfg-unlocked').style.display='';
+    loadCfgTasks();
+  } else { document.getElementById('pin-err').style.display=''; }
+}
+function lockCfg() { cfgUnlocked=false; document.getElementById('cfg-locked').style.display=''; document.getElementById('cfg-unlocked').style.display='none'; }
+
+async function loadCfgTasks() {
+  const tb = document.getElementById('cfg-body');
+  try {
+    const r = await api('getConfigTasks');
+    if (!r.success) return;
+    const tasks = r.data||[];
+    if (!tasks.length) { tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:var(--muted)">No tasks configured</td></tr>'; return; }
+    tb.innerHTML = tasks.map((t,i)=>{
+      const col = t.status==='DUE'?'var(--red)':t.status==='SOON'?'var(--amber)':'var(--green)';
+      return `<tr>
+        <td><span style="color:${t.active?'var(--green)':'var(--muted)'}">${t.active?'●':'○'}</span></td>
+        <td style="font-weight:600">${t.name}</td>
+        <td>${t.interval} hrs</td>
+        <td>${t.lastDone} hrs</td>
+        <td style="color:var(--accent);font-weight:700">${t.nextDue} hrs</td>
+        <td>${t.notifyBefore} hrs</td>
+        <td>${t.assignedTo||'—'}</td>
+        <td style="color:${col};font-weight:600">${t.remaining>=0?'+':''}${t.remaining} hrs</td>
+        <td><span class="badge ${t.status.toLowerCase()}">${t.status}</span></td>
+        <td><button class="btn btn-d btn-sm" onclick="delTask(${t.rowIndex})">✕</button></td>
+      </tr>`;
+    }).join('');
+  } catch(e) {}
+}
+
+function showAddTask() { document.getElementById('add-task-form').style.display=''; }
+function hideAddTask() { document.getElementById('add-task-form').style.display='none'; }
+async function addConfigTask() {
+  const data = {
+    name: document.getElementById('cfg-name').value,
+    interval: document.getElementById('cfg-interval').value,
+    lastDone: document.getElementById('cfg-lastdone').value,
+    notifyBefore: document.getElementById('cfg-notify').value,
+    assignedTo: document.getElementById('cfg-assigned').value,
+    notes: document.getElementById('cfg-notes').value
+  };
+  if (!data.name||!data.interval) { snack('Task name and interval required'); return; }
+  try { const r = await api('addConfigTask', data); if(r.success){snack('✓ Task added'); hideAddTask(); loadCfgTasks();} } catch(e){}
+}
+async function delTask(rowIndex) {
+  if (!confirm('Remove this maintenance task?')) return;
+  try { await api('deleteConfigTask', {rowIndex}); loadCfgTasks(); snack('Task removed'); } catch(e){}
+}
+
+// ─── SNACK ────────────────────────────────────────────────────────────────
+function snack(msg) {
+  const el=document.getElementById('snack');
+  el.textContent=msg; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>
