@@ -3,212 +3,909 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PistenBully 400 W — Operations Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>PistenBully 400 W — Operations Portal (Snow Patrol)</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=Barlow:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#0f1117; --surface:#181c27; --surface2:#1e2333; --border:#2a3048;
-    --accent:#e8a020; --accent2:#f0c060; --blue:#3d8bcd;
-    --green:#2ecc71; --red:#e74c3c; --amber:#f39c12;
-    --text:#e8ecf4; --muted:#7a8499; --snow:#c8d8f0;
-  }
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-  .top-bar{background:linear-gradient(135deg,#0a0d14,#111520,#0e1219);border-bottom:2px solid var(--accent);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,.6);}
-  .brand{display:flex;align-items:center;gap:14px;}
-  .brand-icon{width:42px;height:42px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#000;font-family:'Barlow Condensed',sans-serif;letter-spacing:-1px;}
-  .brand-text h1{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:1px;color:var(--accent);text-transform:uppercase;line-height:1;}
-  .brand-text p{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
-  .top-right{display:flex;align-items:center;gap:14px;}
-  .hour-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 14px;text-align:center;}
-  .hour-box .lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
-  .hour-box .val{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;color:var(--accent);line-height:1.1;}
-  .pill{font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;}
-  .pill.green{background:rgba(46,204,113,.15);color:var(--green);border:1px solid rgba(46,204,113,.3);}
-  .nav-tabs{background:var(--surface);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;padding:0 16px;gap:2px;}
-  .nav-tab{display:flex;align-items:center;gap:7px;padding:13px 18px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);background:transparent;border:none;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s;}
-  .nav-tab:hover{color:var(--text);}
-  .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(232,160,32,.05);}
-  .nav-tab .bdg{background:var(--red);color:#fff;font-size:9px;border-radius:10px;padding:1px 6px;margin-left:2px;}
-  .main{padding:22px;max-width:1400px;margin:0 auto;}
-  .tab-content{display:none;}
-  .tab-content.active{display:block;animation:fadeIn .22s ease;}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-  .sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
-  .sec-hdr h2{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
-  .sec-hdr h2 span{color:var(--accent);}
-  .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:20px;}
-  .sc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative;overflow:hidden;}
-  .sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
-  .sc.a::before{background:var(--accent)}.sc.b::before{background:var(--blue)}.sc.g::before{background:var(--green)}.sc.r::before{background:var(--red)}.sc.am::before{background:var(--amber)}
-  .sc .sl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;}
-  .sc .sv{font-family:'Barlow Condensed',sans-serif;font-size:34px;font-weight:800;line-height:1;}
-  .sc .ss{font-size:12px;color:var(--muted);margin-top:3px;}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:18px;}
-  .card-hdr{padding:13px 18px;border-bottom:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;gap:8px;}
-  table{width:100%;border-collapse:collapse;}
-  th{background:var(--surface2);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:9px 14px;text-align:left;border-bottom:1px solid var(--border);}
-  td{padding:11px 14px;border-bottom:1px solid rgba(42,48,72,.45);font-size:13px;vertical-align:middle;}
-  tr:last-child td{border-bottom:none;}
-  tr:hover td{background:rgba(255,255,255,.02);}
-  .badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;}
-  .ok{background:rgba(46,204,113,.12);color:var(--green);border:1px solid rgba(46,204,113,.25);}
-  .due{background:rgba(231,76,60,.12);color:var(--red);border:1px solid rgba(231,76,60,.3);}
-  .soon{background:rgba(243,156,18,.12);color:var(--amber);border:1px solid rgba(243,156,18,.3);}
-  .breakdown{background:rgba(231,76,60,.12);color:var(--red);border:1px solid rgba(231,76,60,.3);}
-  .scheduled{background:rgba(61,139,205,.12);color:var(--blue);border:1px solid rgba(61,139,205,.3);}
-  .inspection{background:rgba(200,216,240,.1);color:var(--snow);border:1px solid rgba(200,216,240,.2);}
-  .operational{background:rgba(46,204,113,.12);color:var(--green);border:1px solid rgba(46,204,113,.25);}
-  .observation{background:rgba(243,156,18,.12);color:var(--amber);border:1px solid rgba(243,156,18,.3);}
-  .notcleared{background:rgba(231,76,60,.12);color:var(--red);border:1px solid rgba(231,76,60,.3);}
-  .muted-badge{background:rgba(122,132,153,.12);color:var(--muted);border:1px solid rgba(122,132,153,.2);}
-  .prog-wrap{background:rgba(255,255,255,.06);border-radius:4px;height:5px;width:100px;overflow:hidden;display:inline-block;}
-  .prog-fill{height:100%;border-radius:4px;}
-  .form-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px;margin-bottom:18px;}
-  .form-card h3{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;color:var(--accent);}
-  .frow{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:12px;}
-  .fg{display:flex;flex-direction:column;gap:5px;}
-  .fg label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:600;}
-  .fg input,.fg select,.fg textarea{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:8px 11px;font-family:'Barlow',sans-serif;font-size:13px;transition:border-color .2s;}
-  .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--accent);}
-  .fg textarea{resize:vertical;min-height:75px;}
-  .check-sec{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px;}
-  .check-sec-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
-  .check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px;}
-  .ci{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:5px;cursor:pointer;}
-  .ci:hover{background:rgba(255,255,255,.03);}
-  .ci input[type=checkbox]{width:15px;height:15px;accent-color:var(--accent);flex-shrink:0;}
-  .ci label{font-size:13px;cursor:pointer;flex:1;}
-  .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:none;transition:all .2s;}
-  .btn-p{background:var(--accent);color:#000;}.btn-p:hover{background:var(--accent2);}
-  .btn-s{background:var(--surface2);color:var(--text);border:1px solid var(--border);}.btn-s:hover{border-color:var(--accent);color:var(--accent);}
-  .btn-sm{padding:5px 11px;font-size:11px;}
-  .btn-d{background:rgba(231,76,60,.15);color:var(--red);border:1px solid rgba(231,76,60,.3);}.btn-d:hover{background:rgba(231,76,60,.25);}
-  .fbar{display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
-  .fbar input,.fbar select{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:7px 11px;font-family:'Barlow',sans-serif;font-size:13px;}
-  .fbar input:focus,.fbar select:focus{outline:none;border-color:var(--accent);}
-  .fbar input{flex:1;min-width:160px;}
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-  @media(max-width:900px){.two-col{grid-template-columns:1fr;}}
-  .msg{padding:9px 13px;border-radius:6px;font-size:13px;margin-bottom:12px;}
-  .msg.success{background:rgba(46,204,113,.12);color:var(--green);border:1px solid rgba(46,204,113,.25);}
-  .msg.error{background:rgba(231,76,60,.12);color:var(--red);border:1px solid rgba(231,76,60,.3);}
-  .tw{overflow-x:auto;}
-  .tw table{min-width:650px;}
-  /* Timeline */
-  .tl-item{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid rgba(42,48,72,.4);}
-  .tl-item:last-child{border-bottom:none;}
-  .tl-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:2px;}
-  .tl-dot.breakdown{background:rgba(231,76,60,.15);}
-  .tl-dot.scheduled{background:rgba(61,139,205,.15);}
-  .tl-dot.inspection{background:rgba(200,216,240,.1);}
-  .tl-body{flex:1;}
-  .tl-title{font-size:13px;font-weight:600;margin-bottom:3px;}
-  .tl-meta{font-size:12px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;}
-  .tl-notes{font-size:12px;color:var(--snow);margin-top:4px;background:var(--surface2);padding:6px 10px;border-radius:5px;border-left:3px solid var(--accent);}
-  /* Modal */
-  .mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:200;align-items:center;justify-content:center;}
-  .mo.open{display:flex;}
-  .mo-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:26px;max-width:500px;width:90%;max-height:90vh;overflow-y:auto;}
-  .mo-box h3{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;color:var(--accent);}
-  .mo-box input,.mo-box select{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:9px 12px;font-size:13px;margin-bottom:11px;}
-  .mo-box input:focus,.mo-box select:focus{outline:none;border-color:var(--accent);}
-  .mo-btns{display:flex;gap:9px;justify-content:flex-end;margin-top:12px;}
-  /* Locked */
-  .locked{text-align:center;padding:60px 20px;}
-  .locked .lock-icon{font-size:48px;margin-bottom:14px;}
-  .locked h3{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
-  .locked p{color:var(--muted);font-size:14px;margin-bottom:18px;}
-  /* Snack */
-  #snack{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#1a2040;color:var(--text);padding:11px 22px;border-radius:8px;font-size:13px;z-index:999;display:none;border:1px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,.5);}
-  #snack.show{display:block;animation:sUp .25s ease;}
-  @keyframes sUp{from{opacity:0;bottom:6px}to{opacity:1;bottom:22px}}
-  @media(max-width:600px){.top-bar{padding:0 12px;}.main{padding:12px;}.stats-row{grid-template-columns:1fr 1fr;}}
+:root {
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --surface2: #f4f6f9;
+  --surface3: #eaecf0;
+  --border: #dde1e8;
+  --border2: #c8cdd8;
+  --pb-red: #cc2211;
+  --pb-red2: #e02a18;
+  --pb-red-dim: rgba(204,34,17,0.08);
+  --pb-red-glow: rgba(204,34,17,0.18);
+  --accent: #b86a00;
+  --accent2: #d47f00;
+  --accent-dim: rgba(184,106,0,0.08);
+  --blue: #1558a8;
+  --blue2: #1a6bbf;
+  --blue-dim: rgba(21,88,168,0.08);
+  --green: #1a8a50;
+  --green2: #1d9e5c;
+  --green-dim: rgba(26,138,80,0.08);
+  --red: #b91c1c;
+  --red-dim: rgba(185,28,28,0.08);
+  --amber: #c05a00;
+  --amber-dim: rgba(192,90,0,0.08);
+  --text: #0d1e3a;
+  --text2: #3d5070;
+  --text3: #7a8ba8;
+  --navy: #0d1e3a;
+  --mono: 'Share Tech Mono', monospace;
+  --cond: 'Barlow Condensed', sans-serif;
+  --body: 'Barlow', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── TOP BAR ──────────────────────────────── */
+.topbar {
+  background: var(--navy);
+  border-bottom: 3px solid var(--pb-red);
+  padding: 0 24px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(13,30,58,0.18), 0 1px 0 var(--pb-red-glow);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-mark {
+  width: 44px;
+  height: 44px;
+  background: var(--pb-red);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--cond);
+  font-size: 18px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -1px;
+  box-shadow: 0 2px 8px var(--pb-red-glow);
+  flex-shrink: 0;
+}
+
+.brand-text h1 {
+  font-family: var(--cond);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.brand-text p {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.meter-box {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  padding: 6px 14px;
+  text-align: center;
+  min-width: 90px;
+}
+
+.meter-box .lbl {
+  font-size: 9px;
+  color: rgba(255,255,255,0.55);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-family: var(--cond);
+}
+
+.meter-box .val {
+  font-family: var(--mono);
+  font-size: 22px;
+  color: #fbbf24;
+  line-height: 1.2;
+  letter-spacing: 1px;
+}
+
+.status-pill {
+  font-family: var(--cond);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid;
+}
+
+.status-pill.ok { background: var(--green-dim); color: var(--green2); border-color: rgba(29,184,99,0.3); }
+.status-pill.warn { background: var(--amber-dim); color: var(--amber); border-color: rgba(237,137,54,0.3); }
+.status-pill.crit { background: var(--red-dim); color: var(--red); border-color: rgba(229,62,62,0.3); }
+
+/* ─── NAV TABS ─────────────────────────────── */
+.nav {
+  background: #ffffff;
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  overflow-x: auto;
+  padding: 0 20px;
+  gap: 0;
+  scrollbar-width: none;
+}
+.nav::-webkit-scrollbar { display: none; }
+
+.nav-tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 14px 20px;
+  font-family: var(--cond);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #7a8ba8;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  margin-bottom: -1px;
+}
+
+.nav-tab:hover { color: var(--navy); }
+.nav-tab.active { color: var(--pb-red); border-bottom-color: var(--pb-red); background: rgba(204,34,17,0.04); }
+
+.nav-tab .badge {
+  background: var(--pb-red);
+  color: #fff;
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 2px;
+}
+
+/* ─── MAIN ─────────────────────────────────── */
+.main {
+  padding: 24px;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeUp 0.2s ease; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── SECTION HEADER ───────────────────────── */
+.sec-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sec-hdr h2 {
+  font-family: var(--cond);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+.sec-hdr h2 span { color: var(--pb-red); }
+
+/* ─── STAT CARDS ───────────────────────────── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(13,30,58,0.06);
+  border-radius: 10px;
+  padding: 16px 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+.stat-card.red::before { background: var(--pb-red); }
+.stat-card.amber::before { background: var(--accent); }
+.stat-card.blue::before { background: var(--blue); }
+.stat-card.green::before { background: var(--green); }
+.stat-card.grey::before { background: var(--border2); }
+
+.stat-card .lbl {
+  font-family: var(--cond);
+  font-size: 10px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+}
+
+.stat-card .val {
+  font-family: var(--cond);
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--navy);
+}
+
+.stat-card .sub {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* ─── CARDS ────────────────────────────────── */
+.card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(13,30,58,0.06);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.card-hdr {
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.card-hdr-title {
+  font-family: var(--cond);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-hdr-title .icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.icon-red { background: rgba(204,34,17,0.1); }
+.icon-amber { background: rgba(184,106,0,0.1); }
+.icon-blue { background: rgba(21,88,168,0.1); }
+.icon-green { background: rgba(26,138,80,0.1); }
+
+/* ─── TABLES ───────────────────────────────── */
+.tw { overflow-x: auto; }
+.tw table { min-width: 600px; width: 100%; border-collapse: collapse; }
+
+th {
+  background: #f4f6f9;
+  font-family: var(--cond);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text3);
+  padding: 10px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(13,30,58,0.025); }
+
+/* ─── BADGES ───────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--cond);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.b-green { background: var(--green-dim); color: var(--green2); border: 1px solid rgba(29,184,99,0.25); }
+.b-red { background: var(--red-dim); color: var(--red); border: 1px solid rgba(229,62,62,0.3); }
+.b-amber { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(237,137,54,0.3); }
+.b-blue { background: var(--blue-dim); color: var(--blue2); border: 1px solid rgba(47,127,196,0.3); }
+.b-grey { background: rgba(90,106,128,0.12); color: var(--text3); border: 1px solid rgba(90,106,128,0.2); }
+.b-pb { background: var(--pb-red-dim); color: var(--pb-red2); border: 1px solid var(--pb-red-glow); }
+
+/* ─── BUTTONS ──────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 6px;
+  font-family: var(--cond);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  transition: all 0.18s;
+}
+
+.btn-primary { background: var(--pb-red); color: #fff; }
+.btn-primary:hover { background: var(--pb-red2); box-shadow: 0 4px 16px var(--pb-red-glow); }
+.btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border2); }
+.btn-secondary:hover { border-color: var(--pb-red); color: var(--pb-red); }
+.btn-sm { padding: 6px 12px; font-size: 11px; }
+.btn-amber { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(240,165,0,0.3); }
+.btn-amber:hover { background: rgba(240,165,0,0.2); }
+
+/* ─── FILTER BAR ───────────────────────────── */
+.fbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.fbar input,
+.fbar select {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-family: var(--body);
+  font-size: 13px;
+  transition: border-color 0.2s;
+}
+
+.fbar input { flex: 1; min-width: 160px; }
+.fbar input:focus,
+.fbar select:focus { outline: none; border-color: var(--pb-red); }
+
+/* ─── FORMS ────────────────────────────────── */
+.form-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(13,30,58,0.06);
+  border-radius: 10px;
+  padding: 22px;
+  margin-bottom: 18px;
+}
+
+.form-title {
+  font-family: var(--cond);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--navy);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.fg {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.fg label {
+  font-family: var(--cond);
+  font-size: 10px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+}
+
+.fg input,
+.fg select,
+.fg textarea {
+  background: #f8f9fb;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 9px 12px;
+  font-family: var(--body);
+  font-size: 13px;
+  transition: border-color 0.2s;
+}
+
+.fg input:focus,
+.fg select:focus,
+.fg textarea:focus { outline: none; border-color: var(--pb-red); }
+.fg textarea { resize: vertical; min-height: 80px; }
+
+/* ─── CHECK SECTIONS ───────────────────────── */
+.check-block {
+  background: #f8f9fb;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.check-block-hdr {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  background: #f0f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.check-block-title {
+  font-family: var(--cond);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.check-block-ref {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  font-weight: 500;
+}
+
+.check-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 2px;
+  padding: 8px;
+}
+
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.check-item:hover { background: rgba(13,30,58,0.04); }
+
+.check-item input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--pb-red);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.check-item label {
+  font-size: 13px;
+  line-height: 1.3;
+  cursor: pointer;
+  color: var(--navy);
+}
+
+.check-item label .ref {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  margin-left: 4px;
+}
+
+.check-item label .warn-tag {
+  font-size: 10px;
+  background: var(--pb-red-dim);
+  color: var(--pb-red2);
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: 4px;
+  font-family: var(--cond);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ─── PROGRESS BAR ─────────────────────────── */
+.prog-wrap {
+  background: rgba(13,30,58,0.08);
+  border-radius: 4px;
+  height: 5px;
+  min-width: 80px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.prog-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+/* ─── MESSAGE ──────────────────────────────── */
+.msg {
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  display: none;
+}
+.msg.show { display: block; }
+.msg.success { background: var(--green-dim); color: var(--green2); border: 1px solid rgba(29,184,99,0.25); }
+.msg.error { background: var(--red-dim); color: var(--red); border: 1px solid rgba(229,62,62,0.3); }
+
+/* ─── TIMELINE ─────────────────────────────── */
+.tl-item {
+  display: flex;
+  gap: 14px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tl-item:last-child { border-bottom: none; }
+
+.tl-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.tl-dot.bd { background: rgba(185,28,28,0.1); }
+.tl-dot.sc { background: rgba(21,88,168,0.1); }
+.tl-dot.in { background: rgba(13,30,58,0.07); }
+
+.tl-body { flex: 1; }
+.tl-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.tl-meta { font-size: 12px; color: var(--text3); display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
+
+.tl-notes {
+  font-size: 12px;
+  color: var(--text2);
+  background: #f4f6f9;
+  padding: 7px 12px;
+  border-radius: 5px;
+  border-left: 3px solid var(--accent);
+  margin-top: 6px;
+}
+
+/* ─── MODAL ────────────────────────────────── */
+.mo {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(13,30,58,0.55);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+}
+.mo.open { display: flex; }
+
+.mo-box {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 40px rgba(13,30,58,0.18);
+  border-radius: 12px;
+  padding: 28px;
+  max-width: 540px;
+  width: 92%;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+}
+
+.mo-title {
+  font-family: var(--cond);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--navy);
+  margin-bottom: 16px;
+}
+
+.mo-box input,
+.mo-box select {
+  width: 100%;
+  background: #f4f6f9;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 13px;
+  margin-bottom: 12px;
+  font-family: var(--body);
+}
+
+.mo-box input:focus,
+.mo-box select:focus { outline: none; border-color: var(--pb-red); }
+
+.mo-btns { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; }
+
+/* ─── PIN LOCKED ───────────────────────────── */
+.locked-screen {
+  text-align: center;
+  padding: 70px 20px;
+}
+
+.lock-icon { font-size: 52px; margin-bottom: 16px; }
+
+.locked-screen h3 {
+  font-family: var(--cond);
+  font-size: 24px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+
+.locked-screen p { color: var(--text3); font-size: 14px; margin-bottom: 20px; }
+
+/* ─── SNACK ────────────────────────────────── */
+#snack {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--navy);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 13px;
+  z-index: 999;
+  display: none;
+  border: 1px solid var(--border2);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  white-space: nowrap;
+}
+
+#snack.show { display: block; animation: snackUp 0.25s ease; box-shadow: 0 4px 24px rgba(13,30,58,0.25); }
+@keyframes snackUp { from { opacity: 0; bottom: 8px; } to { opacity: 1; bottom: 24px; } }
+
+/* ─── MAINT SCHEDULE TABLE ─────────────────── */
+.sched-table { width: 100%; border-collapse: collapse; }
+.sched-table th { background: #eaecf0; }
+.sched-table .interval-cell {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+}
+.sched-table .dot-cell { text-align: center; }
+.sched-dot { width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; }
+.sched-dot.y { background: var(--navy); color: #fff; font-size: 10px; font-weight: 900; }
+.sched-dot.n { background: #e4e8ee; color: var(--text3); font-size: 10px; }
+.sched-dot.cust { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(240,165,0,0.3); font-size: 10px; }
+.sched-dot.kass { background: var(--blue-dim); color: var(--blue2); border: 1px solid rgba(47,127,196,0.3); font-size: 10px; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media(max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ─── WINCH STATUS BANNER ──────────────────── */
+.winch-alert {
+  background: linear-gradient(135deg, rgba(204,34,17,0.05) 0%, rgba(204,34,17,0.02) 100%);
+  border: 1px solid rgba(229,62,62,0.3);
+  border-left: 4px solid var(--pb-red);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.winch-alert-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+.winch-alert-body h4 { font-family: var(--cond); font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--red); margin-bottom: 5px; }
+.winch-alert-body p { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+/* ─── DIVIDER ──────────────────────────────── */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border2), transparent);
+  margin: 20px 0;
+}
+
+@media(max-width: 600px) {
+  .topbar { padding: 0 12px; }
+  .main { padding: 12px; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+}
 </style>
 </head>
 <body>
 
 <!-- TOP BAR -->
-<div class="top-bar">
+<div class="topbar">
   <div class="brand">
-    <div class="brand-icon">PB</div>
+    <div class="brand-mark">PB</div>
     <div class="brand-text">
       <h1>PistenBully 400 W</h1>
-      <p>MJSR Operations Portal · Malam Jabba Ski Resort</p>
+      <p>MJSR Operations Portal · Samsons Group</p>
     </div>
   </div>
-  <div class="top-right">
-    <div class="hour-box">
+  <div class="topbar-right">
+    <div class="meter-box">
       <div class="lbl">Hour Meter</div>
       <div class="val" id="top-hours">—</div>
     </div>
-    <div class="pill green" id="top-status">Operational</div>
+    <span class="status-pill ok" id="top-status">Operational</span>
   </div>
 </div>
 
 <!-- NAV TABS -->
-<div class="nav-tabs">
+<div class="nav">
   <button class="nav-tab active" onclick="showTab('dashboard')" data-tab="dashboard">📊 Dashboard</button>
   <button class="nav-tab" onclick="showTab('submit')" data-tab="submit">📋 Submit Check</button>
   <button class="nav-tab" onclick="showTab('sublog')" data-tab="sublog">📁 Submission Log</button>
   <button class="nav-tab" onclick="showTab('maintenance')" data-tab="maintenance">🔧 Maintenance Master</button>
   <button class="nav-tab" onclick="showTab('timeline')" data-tab="timeline">📖 Maintenance Log</button>
-  <button class="nav-tab" onclick="showTab('config')" data-tab="config">⚙️ Config <span class="bdg" id="due-badge" style="display:none">!</span></button>
+  <button class="nav-tab" onclick="showTab('schedule')" data-tab="schedule">📐 Service Schedule</button>
+  <button class="nav-tab" onclick="showTab('winch')" data-tab="winch">⚡ Winch Status</button>
+  <button class="nav-tab" onclick="showTab('config')" data-tab="config">⚙️ Config <span class="badge" id="due-badge" style="display:none">!</span></button>
 </div>
 
 <div class="main">
 
-<!-- ═══ DASHBOARD ═══════════════════════════════════════════════════════ -->
+<!-- ═══ DASHBOARD ══════════════════════════════════════════════════════════ -->
 <div class="tab-content active" id="tab-dashboard">
-  <div class="sec-hdr"><h2>Operations <span>Dashboard</span></h2>
-    <button class="btn btn-s btn-sm" onclick="loadDashboard()">↻ Refresh</button>
+  <div class="sec-hdr">
+    <h2>Operations <span>Dashboard</span></h2>
+    <button class="btn btn-secondary btn-sm" onclick="loadDashboard()">↻ Refresh</button>
   </div>
-  <div class="stats-row">
-    <div class="sc a"><div class="sl">Current Hour Meter</div><div class="sv" id="d-hours">—</div><div class="ss">Engine hours</div></div>
-    <div class="sc b"><div class="sl">Operator Checks (30d)</div><div class="sv" id="d-op">—</div></div>
-    <div class="sc g"><div class="sl">Mech Checks (30d)</div><div class="sv" id="d-mc">—</div></div>
-    <div class="sc am"><div class="sl">Fuel Added (30d)</div><div class="sv" id="d-fuel">—</div><div class="ss">Litres</div></div>
-    <div class="sc r"><div class="sl">Maint Items Due/Soon</div><div class="sv" id="d-due">—</div></div>
-    <div class="sc b"><div class="sl">Total Service Records</div><div class="sv" id="d-svc">—</div></div>
+
+  <!-- Winch critical alert on dashboard -->
+  <div class="winch-alert">
+    <div class="winch-alert-icon">⚡</div>
+    <div class="winch-alert-body">
+      <h4>Winch System — Fully Non-Operational</h4>
+      <p>All winch functions are currently inactive including slew, park brake and despool. Mooring Governor replaced — no improvement. Root cause unknown. Xristos assessment pending. All 2026 PistenBully parts ordered and being prepared for arrival. <strong>Do not attempt winch operation until further notice.</strong></p>
+    </div>
   </div>
+
+  <div class="stat-grid">
+    <div class="stat-card red"><div class="lbl">Current Hour Meter</div><div class="val" id="d-hours">—</div><div class="sub">Engine hours</div></div>
+    <div class="stat-card blue"><div class="lbl">Operator Checks (30d)</div><div class="val" id="d-op">—</div></div>
+    <div class="stat-card green"><div class="lbl">Mech Checks (30d)</div><div class="val" id="d-mc">—</div></div>
+    <div class="stat-card amber"><div class="lbl">Fuel Added (30d)</div><div class="val" id="d-fuel">—</div><div class="sub">Litres</div></div>
+    <div class="stat-card red"><div class="lbl">Maint Due / Soon</div><div class="val" id="d-due">—</div></div>
+    <div class="stat-card grey"><div class="lbl">Total Service Records</div><div class="val" id="d-svc">—</div></div>
+  </div>
+
   <div class="two-col">
     <div class="card">
-      <div class="card-hdr"><span>⚙️ Scheduled Maintenance</span></div>
+      <div class="card-hdr">
+        <div class="card-hdr-title"><div class="icon icon-amber">⚙️</div>Scheduled Maintenance</div>
+      </div>
       <table><thead><tr><th>Task</th><th>Next Due</th><th>Remaining</th><th>Status</th></tr></thead>
-        <tbody id="d-maint-tbl"><tr><td colspan="4" style="text-align:center;color:var(--muted);padding:18px">Loading…</td></tr></tbody>
+        <tbody id="d-maint-tbl"><tr><td colspan="4" style="text-align:center;color:var(--text3);padding:20px">Loading…</td></tr></tbody>
       </table>
     </div>
     <div class="card">
-      <div class="card-hdr"><span>⚠️ Recent Issues / Notes</span><span style="font-size:11px;color:var(--muted);font-weight:400">Last 10 flagged entries</span></div>
-      <div id="d-issues" style="padding:10px;max-height:260px;overflow-y:auto;"><div style="text-align:center;color:var(--muted);padding:18px;font-size:13px">Loading…</div></div>
+      <div class="card-hdr">
+        <div class="card-hdr-title"><div class="icon icon-red">⚠️</div>Recent Issues / Notes</div>
+        <span style="font-size:11px;color:var(--text3)">Last 10 flagged</span>
+      </div>
+      <div id="d-issues" style="padding:10px;max-height:280px;overflow-y:auto;background:#fff">
+        <div style="text-align:center;color:var(--text3);padding:20px;font-size:13px">Loading…</div>
+      </div>
     </div>
   </div>
+
   <div class="card">
-    <div class="card-hdr"><span>📋 Recent Submissions (Last 7)</span></div>
+    <div class="card-hdr"><div class="card-hdr-title"><div class="icon icon-blue">📋</div>Recent Submissions (Last 7)</div></div>
     <div class="tw">
       <table><thead><tr><th>Date</th><th>Type</th><th>Name</th><th>Hour Meter</th><th>Area / Slope</th><th>Fuel (L)</th><th>Notes</th></tr></thead>
-        <tbody id="d-recent"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:18px">Loading…</td></tr></tbody>
+        <tbody id="d-recent"><tr><td colspan="7" style="text-align:center;color:var(--text3);padding:20px">Loading…</td></tr></tbody>
       </table>
     </div>
   </div>
 </div>
 
-<!-- ═══ SUBMIT CHECK ════════════════════════════════════════════════════ -->
+<!-- ═══ SUBMIT CHECK ═══════════════════════════════════════════════════════ -->
 <div class="tab-content" id="tab-submit">
   <div class="sec-hdr"><h2>Submit <span>Check</span></h2></div>
-  <div class="form-card" style="padding:16px;margin-bottom:14px;">
-    <div style="display:flex;gap:11px;flex-wrap:wrap;">
-      <button class="btn btn-p" id="btn-op" onclick="setType('op')">🎿 Operator Check</button>
-      <button class="btn btn-s" id="btn-mc" onclick="setType('mc')">🔧 Mechanical Check</button>
+
+  <div class="form-card" style="padding:14px 18px;margin-bottom:14px">
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-primary" id="btn-op" onclick="setType('op')">🎿 Operator Pre-Shift Check</button>
+      <button class="btn btn-secondary" id="btn-mc" onclick="setType('mc')">🔧 Mechanical Inspection Check</button>
     </div>
   </div>
 
   <!-- OPERATOR FORM -->
   <div id="form-op">
     <div class="form-card">
-      <h3>🎿 Operator Pre-Shift Check</h3>
-      <div id="op-msg"></div>
-      <div class="frow">
+      <div class="form-title">🎿 Operator Pre-Shift Check</div>
+      <div class="msg" id="op-msg"></div>
+      <div class="form-row">
         <div class="fg"><label>Date</label><input type="date" id="op-date"></div>
         <div class="fg"><label>Operator Name</label><input type="text" id="op-name" placeholder="Full name"></div>
         <div class="fg"><label>Shift</label>
@@ -222,73 +919,97 @@
         <div class="fg"><label>Fuel Added (Litres)</label><input type="number" id="op-fuel" placeholder="0" step="1" value="0"></div>
       </div>
 
-      <!-- Individual checks grouped -->
-      <div class="check-sec">
-        <div class="check-sec-title">💧 Fluid Levels &amp; Engine</div>
+      <!-- Checks Before Operation — per Winch Manual p.25 -->
+      <div class="check-block">
+        <div class="check-block-hdr">
+          <div class="check-block-title">💧 Fluid Levels &amp; Engine Start</div>
+          <div class="check-block-ref">CWI p.13 · W1</div>
+        </div>
         <div class="check-grid">
-          <div class="ci"><input type="checkbox" id="op-engOil"><label for="op-engOil">Engine Oil Level OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-hydFluid"><label for="op-hydFluid">Hydraulic Fluid Level OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-coolant"><label for="op-coolant">Coolant Level OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-engStart"><label for="op-engStart">Engine Start OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-lights"><label for="op-lights">All Lights Working?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-engOil"><label for="op-engOil">Engine Oil Level OK? <span class="ref">(CWI p.16 S1)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="op-hydFluid"><label for="op-hydFluid">Hydraulic Fluid Level OK? <span class="ref">(CWI p.16 S1)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="op-coolant"><label for="op-coolant">Coolant Level OK — Check Freeze Protection? <span class="ref">(CWI p.16)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="op-engStart"><label for="op-engStart">Engine Start OK — Listen for Abnormal Noises?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-lights"><label for="op-lights">All Lights Working? <span class="ref">(CWI p.15 W1)</span></label></div>
         </div>
       </div>
-      <div class="check-sec">
-        <div class="check-sec-title">🔩 Blade</div>
+
+      <div class="check-block">
+        <div class="check-block-hdr">
+          <div class="check-block-title">🔩 Front Blade</div>
+          <div class="check-block-ref">CWI p.13 · W1/W2</div>
+        </div>
         <div class="check-grid">
-          <div class="ci"><input type="checkbox" id="op-blade3pt"><label for="op-blade3pt">Blade 3-Point Link OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-bladeHoses"><label for="op-bladeHoses">Blade Hoses OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-bladeCyl"><label for="op-bladeCyl">Blade Cylinders OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-bladePins"><label for="op-bladePins">Blade Big Pins &amp; Nuts OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-blade3pt"><label for="op-blade3pt">Blade 3-Point Link OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-bladeHoses"><label for="op-bladeHoses">Blade Hoses — No Leaks or Chafing?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-bladeCyl"><label for="op-bladeCyl">Blade Cylinders — No Leaks?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-bladePins"><label for="op-bladePins">Blade Big Pins &amp; Nuts Secure?</label></div>
         </div>
       </div>
-      <div class="check-sec">
-        <div class="check-sec-title">🔗 Left Track</div>
+
+      <div class="check-block">
+        <div class="check-block-hdr">
+          <div class="check-block-title">🔗 Left Side Track</div>
+          <div class="check-block-ref">CWI p.15 · W1</div>
+        </div>
         <div class="check-grid">
-          <div class="ci"><input type="checkbox" id="op-ltTension"><label for="op-ltTension">Left Track Tension OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-ltGrousers"><label for="op-ltGrousers">Left Track Grousers — Any Damage?</label></div>
-          <div class="ci"><input type="checkbox" id="op-ltSprocket"><label for="op-ltSprocket">Left Track Sprocket OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-ltSpBolts"><label for="op-ltSpBolts">Left Sprocket Bolts OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-ltJoin"><label for="op-ltJoin">Left Track Join Bolts &amp; Plates OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-ltTension"><label for="op-ltTension">Left Track Tension OK? <span class="ref">(Check every 50 hrs)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="op-ltGrousers"><label for="op-ltGrousers">Left Track Grousers — Any Damage?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-ltSprocket"><label for="op-ltSprocket">Left Sprocket OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-ltSpBolts"><label for="op-ltSpBolts">Left Sprocket Bolts Tight?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-ltJoin"><label for="op-ltJoin">Left Track Join Bolts &amp; Plates OK?</label></div>
         </div>
       </div>
-      <div class="check-sec">
-        <div class="check-sec-title">⚙️ Tiller</div>
+
+      <div class="check-block">
+        <div class="check-block-hdr">
+          <div class="check-block-title">⚙️ Tiller</div>
+          <div class="check-block-ref">CWI p.13 · W1</div>
+        </div>
         <div class="check-grid">
-          <div class="ci"><input type="checkbox" id="op-tillerPins"><label for="op-tillerPins">Tiller Lifting Frame Large Pins OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-tillerHoses"><label for="op-tillerHoses">Tiller Hoses OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-tillerCyl"><label for="op-tillerCyl">Tiller Cylinders OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-tillerPNuts"><label for="op-tillerPNuts">Tiller Pins &amp; Nuts OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-tillerFin"><label for="op-tillerFin">Tiller Finisher Mats OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-tillerCut"><label for="op-tillerCut">Tiller Cutter Bar OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-tillerPins"><label for="op-tillerPins">Tiller Lifting Frame Large Pins OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-tillerHoses"><label for="op-tillerHoses">Tiller Hoses — No Leaks or Chafing?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-tillerCyl"><label for="op-tillerCyl">Tiller Cylinders OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-tillerPNuts"><label for="op-tillerPNuts">Tiller Pins &amp; Nuts Secure?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-tillerFin"><label for="op-tillerFin">Tiller Finisher Mats OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-tillerCut"><label for="op-tillerCut">Tiller Cutter Bar OK?</label></div>
         </div>
       </div>
-      <div class="check-sec">
-        <div class="check-sec-title">🔗 Right Track</div>
+
+      <div class="check-block">
+        <div class="check-block-hdr">
+          <div class="check-block-title">🔗 Right Side Track</div>
+          <div class="check-block-ref">CWI p.15 · W1</div>
+        </div>
         <div class="check-grid">
-          <div class="ci"><input type="checkbox" id="op-rtTension"><label for="op-rtTension">Right Track Tension OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-rtGrousers"><label for="op-rtGrousers">Right Track Grousers — Any Damage?</label></div>
-          <div class="ci"><input type="checkbox" id="op-rtSprocket"><label for="op-rtSprocket">Right Track Sprocket OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-rtSpBolts"><label for="op-rtSpBolts">Right Sprocket Bolts OK?</label></div>
-          <div class="ci"><input type="checkbox" id="op-rtJoin"><label for="op-rtJoin">Right Track Join Bolts &amp; Plates OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-rtTension"><label for="op-rtTension">Right Track Tension OK? <span class="ref">(Check every 50 hrs)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="op-rtGrousers"><label for="op-rtGrousers">Right Track Grousers — Any Damage?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-rtSprocket"><label for="op-rtSprocket">Right Sprocket OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-rtSpBolts"><label for="op-rtSpBolts">Right Sprocket Bolts Tight?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-rtJoin"><label for="op-rtJoin">Right Track Join Bolts &amp; Plates OK?</label></div>
         </div>
       </div>
-      <div class="check-sec">
-        <div class="check-sec-title">🚗 Cab / General</div>
+
+      <div class="check-block">
+        <div class="check-block-hdr">
+          <div class="check-block-title">🚗 Cab &amp; Safety</div>
+          <div class="check-block-ref">CWI p.15 · W1</div>
+        </div>
         <div class="check-grid">
-          <div class="ci"><input type="checkbox" id="op-cabinDmg"><label for="op-cabinDmg">Cabin Damage?</label></div>
-          <div class="ci"><input type="checkbox" id="op-fireExt"><label for="op-fireExt">Fire Extinguisher in Machine?</label></div>
-          <div class="ci"><input type="checkbox" id="op-leaks"><label for="op-leaks">Any Leaks Under Machine?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-cabinDmg"><label for="op-cabinDmg">Cabin — Any Damage?</label></div>
+          <div class="check-item"><input type="checkbox" id="op-fireExt"><label for="op-fireExt">Fire Extinguisher Present &amp; Not Expired? <span class="warn-tag">SAFETY</span></label></div>
+          <div class="check-item"><input type="checkbox" id="op-leaks"><label for="op-leaks">Any Leaks Under Machine?</label></div>
         </div>
       </div>
-      <div style="display:flex;gap:9px;margin-top:6px;margin-bottom:12px;">
-        <button class="btn btn-s btn-sm" onclick="selectAll('form-op')">✓ Select All</button>
-        <button class="btn btn-s btn-sm" onclick="clearAll('form-op')">✗ Clear All</button>
+
+      <div style="display:flex;gap:8px;margin:8px 0 12px">
+        <button class="btn btn-secondary btn-sm" onclick="selectAll('form-op')">✓ Select All</button>
+        <button class="btn btn-secondary btn-sm" onclick="clearAll('form-op')">✗ Clear All</button>
       </div>
       <div class="fg"><label>Issues / Notes</label><textarea id="op-notes" placeholder="Any faults, observations or issues worth noting…"></textarea></div>
-      <div style="display:flex;gap:9px;margin-top:14px;">
-        <button class="btn btn-p" onclick="submitOp()">✓ Submit Operator Check</button>
-        <button class="btn btn-s" onclick="clearOpForm()">Clear</button>
+      <div style="display:flex;gap:10px;margin-top:16px">
+        <button class="btn btn-primary" onclick="submitOp()">✓ Submit Operator Check</button>
+        <button class="btn btn-secondary" onclick="clearOpForm()">Clear</button>
       </div>
     </div>
   </div>
@@ -296,227 +1017,517 @@
   <!-- MECHANICAL FORM -->
   <div id="form-mc" style="display:none">
     <div class="form-card">
-      <h3>🔧 Mechanical Inspection Check</h3>
-      <div id="mc-msg"></div>
-      <div class="frow">
+      <div class="form-title">🔧 Mechanical Inspection Check</div>
+      <div class="msg" id="mc-msg"></div>
+      <div class="form-row">
         <div class="fg"><label>Date</label><input type="date" id="mc-date"></div>
         <div class="fg"><label>Mechanic Name</label><input type="text" id="mc-name" placeholder="Full name"></div>
         <div class="fg"><label>Current Hour Meter</label><input type="number" id="mc-hours" placeholder="e.g. 7135" step="0.1"></div>
         <div class="fg"><label>Diesel Added (Litres)</label><input type="number" id="mc-diesel" placeholder="0" step="1" value="0"></div>
       </div>
-      <div class="check-sec">
-        <div class="check-sec-title">💧 Fluid Levels</div>
-        <div class="frow" style="margin-bottom:0">
-          <div class="fg"><label>Engine Oil Level</label><select id="mc-engOil"><option>Full</option><option>Half</option><option>Low</option><option>Critical</option></select></div>
-          <div class="fg"><label>Hydraulic Oil Level</label><select id="mc-hydOil"><option>Full</option><option>Half</option><option>Low</option><option>Critical</option></select></div>
-          <div class="fg"><label>Coolant Level</label><select id="mc-coolant"><option>Full</option><option>Half</option><option>Low</option><option>Critical</option></select></div>
+
+      <!-- Fluid Levels with actual spec -->
+      <div class="check-block">
+        <div class="check-block-hdr">
+          <div class="check-block-title">💧 Fluid Levels</div>
+          <div class="check-block-ref">CWI p.16 · Every 100 hrs</div>
+        </div>
+        <div class="form-row" style="padding:12px 12px 4px;margin:0">
+          <div class="fg"><label>Engine Oil Level <span style="color:var(--text3);font-size:9px">(SAE 10W40 · 26.5L)</span></label>
+            <select id="mc-engOil"><option>Full</option><option>Half</option><option>Low — topped up</option><option>Low — needs attention</option><option>Critical</option></select>
+          </div>
+          <div class="fg"><label>Hydraulic Oil Level <span style="color:var(--text3);font-size:9px">(HVLP VG46 · 80L total)</span></label>
+            <select id="mc-hydOil"><option>Full</option><option>Half</option><option>Low — topped up</option><option>Low — needs attention</option><option>Critical</option></select>
+          </div>
+          <div class="fg"><label>Coolant Level <span style="color:var(--text3);font-size:9px">(50/50 mix · 30L)</span></label>
+            <select id="mc-coolant"><option>Full</option><option>Half</option><option>Low — topped up</option><option>Low — needs attention</option><option>Critical</option></select>
+          </div>
         </div>
       </div>
-      <div class="check-sec">
-        <div class="check-sec-title">🔩 Blade Checks</div>
+
+      <div class="check-block">
+        <div class="check-block-hdr">
+          <div class="check-block-title">🔩 Blade Checks</div>
+          <div class="check-block-ref">CWI p.13–14 · W1/W2</div>
+        </div>
         <div class="check-grid">
-          <div class="ci"><input type="checkbox" id="mc-bCutterTeeth"><label for="mc-bCutterTeeth">Cutter Teeth OK?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-bWings"><label for="mc-bWings">Wings Open/Close Function?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-bUpDown"><label for="mc-bUpDown">Up/Down Function?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-bTiltLR"><label for="mc-bTiltLR">Left/Right Tilt?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-bSlewLR"><label for="mc-bSlewLR">Left/Right Slew?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-bSwingerBolts"><label for="mc-bSwingerBolts">Swinger Bolts Tight?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-bFramePins"><label for="mc-bFramePins">Frame Pins &amp; Nuts Tight?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-bCylPins"><label for="mc-bCylPins">Cylinder Pins &amp; Nuts Tight?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-bCylLeak"><label for="mc-bCylLeak">Cylinders Leaking?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-bHoses"><label for="mc-bHoses">Hoses Secure, No Leaks?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-bCutterTeeth"><label for="mc-bCutterTeeth">Cutter Teeth OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-bWings"><label for="mc-bWings">Wings Open/Close Function OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-bUpDown"><label for="mc-bUpDown">Up/Down Function OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-bTiltLR"><label for="mc-bTiltLR">Left/Right Tilt OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-bSlewLR"><label for="mc-bSlewLR">Left/Right Slew OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-bSwingerBolts"><label for="mc-bSwingerBolts">Swinger Bolts Tight?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-bFramePins"><label for="mc-bFramePins">Frame Pins &amp; Nuts Tight?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-bCylPins"><label for="mc-bCylPins">Cylinder Pins &amp; Nuts Tight?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-bCylLeak"><label for="mc-bCylLeak">Cylinders Leaking?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-bHoses"><label for="mc-bHoses">Hoses Secure, No Leaks or Chafing?</label></div>
         </div>
       </div>
-      <div class="check-sec">
-        <div class="check-sec-title">🔗 Left Track Checks</div>
+
+      <div class="check-block">
+        <div class="check-block-hdr">
+          <div class="check-block-title">🔗 Left Track — Mechanical</div>
+          <div class="check-block-ref">CWI p.15 · W1/W2</div>
+        </div>
         <div class="check-grid">
-          <div class="ci"><input type="checkbox" id="mc-ltTension"><label for="mc-ltTension">Tension Test OK?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-ltGrouser"><label for="mc-ltGrouser">Grouser Damage?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-ltCleats"><label for="mc-ltCleats">Cleats Loose?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-ltBelts"><label for="mc-ltBelts">Track Belts OK?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-ltJoin"><label for="mc-ltJoin">Join Bolts/Nuts/Plates OK?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-ltTWNuts"><label for="mc-ltTWNuts">Tension Wheel Nuts Tight?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-ltGuider"><label for="mc-ltGuider">Guider Wheel Bolts Tight?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-ltSpTeeth"><label for="mc-ltSpTeeth">Sprocket Teeth Damage?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-ltSpBolts"><label for="mc-ltSpBolts">Sprocket Bolts Tight?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-ltSpOil"><label for="mc-ltSpOil">Sprocket Gear Oil Level OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-ltTension"><label for="mc-ltTension">Tension Test OK? <span class="ref">(Check every 50 hrs)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-ltGrouser"><label for="mc-ltGrouser">Grouser Damage? <span class="ref">(Do not re-tighten — replace)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-ltCleats"><label for="mc-ltCleats">Cleats / Ice Picks — No Loose Fasteners?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-ltBelts"><label for="mc-ltBelts">Track Belts OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-ltJoin"><label for="mc-ltJoin">Join Bolts/Nuts/Plates OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-ltTWNuts"><label for="mc-ltTWNuts">Track Tension Device Fasteners OK? <span class="ref">(W1)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-ltGuider"><label for="mc-ltGuider">Guider Wheel Bolts Tight? <span class="ref">(CWI p.15 W2)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-ltSpTeeth"><label for="mc-ltSpTeeth">Left Sprocket Teeth — No Damage?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-ltSpBolts"><label for="mc-ltSpBolts">Left Sprocket Bolts Tight?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-ltSpOil"><label for="mc-ltSpOil">Left Sprocket Gear Oil Level OK? <span class="ref">(PAO ISO VG150 · Change 400 hrs)</span></label></div>
         </div>
       </div>
-      <div class="check-sec">
-        <div class="check-sec-title">🔗 Right Track Checks</div>
+
+      <div class="check-block">
+        <div class="check-block-hdr">
+          <div class="check-block-title">🔗 Right Track — Mechanical</div>
+          <div class="check-block-ref">CWI p.15 · W1/W2</div>
+        </div>
         <div class="check-grid">
-          <div class="ci"><input type="checkbox" id="mc-rtTension"><label for="mc-rtTension">Tension Test OK?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-rtGrouser"><label for="mc-rtGrouser">Grouser Damage?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-rtCleats"><label for="mc-rtCleats">Cleats Loose?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-rtBelts"><label for="mc-rtBelts">Track Belts OK?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-rtJoin"><label for="mc-rtJoin">Join Bolts/Nuts/Plates OK?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-rtTWNuts"><label for="mc-rtTWNuts">Tension Wheel Nuts Tight?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-rtGuider"><label for="mc-rtGuider">Guider Wheel Bolts Tight?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-rtSpTeeth"><label for="mc-rtSpTeeth">Sprocket Teeth Damage?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-rtSpBolts"><label for="mc-rtSpBolts">Sprocket Bolts Tight?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-rtSpOil"><label for="mc-rtSpOil">Sprocket Gear Oil Level OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-rtTension"><label for="mc-rtTension">Tension Test OK? <span class="ref">(Check every 50 hrs)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-rtGrouser"><label for="mc-rtGrouser">Grouser Damage? <span class="ref">(Do not re-tighten — replace)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-rtCleats"><label for="mc-rtCleats">Cleats / Ice Picks — No Loose Fasteners?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-rtBelts"><label for="mc-rtBelts">Track Belts OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-rtJoin"><label for="mc-rtJoin">Join Bolts/Nuts/Plates OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-rtTWNuts"><label for="mc-rtTWNuts">Track Tension Device Fasteners OK? <span class="ref">(W1)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-rtGuider"><label for="mc-rtGuider">Guider Wheel Bolts Tight? <span class="ref">(CWI p.15 W2)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-rtSpTeeth"><label for="mc-rtSpTeeth">Right Sprocket Teeth — No Damage?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-rtSpBolts"><label for="mc-rtSpBolts">Right Sprocket Bolts Tight?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-rtSpOil"><label for="mc-rtSpOil">Right Sprocket Gear Oil Level OK? <span class="ref">(PAO ISO VG150 · Change 400 hrs)</span></label></div>
         </div>
       </div>
-      <div class="check-sec">
-        <div class="check-sec-title">⚙️ Tiller Checks</div>
+
+      <div class="check-block">
+        <div class="check-block-hdr">
+          <div class="check-block-title">⚙️ Tiller — Full Mechanical Inspection</div>
+          <div class="check-block-ref">CWI p.13 · W1/W2</div>
+        </div>
         <div class="check-grid">
-          <div class="ci"><input type="checkbox" id="mc-tilLiftsUp"><label for="mc-tilLiftsUp">Lifts Up OK?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-tilGoesDown"><label for="mc-tilGoesDown">Goes Down OK?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-tilSlewL"><label for="mc-tilSlewL">Slews Left?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-tilSlewR"><label for="mc-tilSlewR">Slews Right?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-tilCutChange"><label for="mc-tilCutChange">Cut Change Function?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-tilTurnTest"><label for="mc-tilTurnTest">⚠️ Turn Test (tiller off ground!)?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-tilSwingBolts"><label for="mc-tilSwingBolts">Swing Bolts Tight (Loctite if loose)?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-tilFrameDmg"><label for="mc-tilFrameDmg">Lifting Frames No Visible Damage?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-tilFrameBolts"><label for="mc-tilFrameBolts">Lifting Frame Large Bolts Secure?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-tilHoses"><label for="mc-tilHoses">Hoses Secure, No Leaks?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-tilCylBolts"><label for="mc-tilCylBolts">Cylinder Bolts &amp; Nuts (White Marker)?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-tilFinMats"><label for="mc-tilFinMats">Finisher Mats Cracks/Damage?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-tilBox"><label for="mc-tilBox">Tiller Box Damage?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-tilSideFin"><label for="mc-tilSideFin">Side Finishers OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-tilLiftsUp"><label for="mc-tilLiftsUp">Lifts Up OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-tilGoesDown"><label for="mc-tilGoesDown">Goes Down OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-tilSlewL"><label for="mc-tilSlewL">Slews Left?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-tilSlewR"><label for="mc-tilSlewR">Slews Right?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-tilCutChange"><label for="mc-tilCutChange">Cut Change Function?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-tilTurnTest"><label for="mc-tilTurnTest">Turn Test? <span class="warn-tag">TILLER OFF GROUND</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-tilSwingBolts"><label for="mc-tilSwingBolts">Swing Bolts Tight — Apply Loctite if Loose?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-tilFrameDmg"><label for="mc-tilFrameDmg">Lifting Frames — No Visible Damage?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-tilFrameBolts"><label for="mc-tilFrameBolts">Lifting Frame Large Bolts Secure?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-tilHoses"><label for="mc-tilHoses">Hoses Secure — No Leaks?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-tilCylBolts"><label for="mc-tilCylBolts">Cylinder Bolts &amp; Nuts — White Marker Check?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-tilFinMats"><label for="mc-tilFinMats">Finisher Mats — Cracks or Damage?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-tilBox"><label for="mc-tilBox">Tiller Box — No Damage?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-tilSideFin"><label for="mc-tilSideFin">Side Finishers OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-tilSpiral"><label for="mc-tilSpiral">Spiral-Bevel Coupling Greased? <span class="ref">(Every 1200 hrs · Avialith 2F)</span></label></div>
         </div>
       </div>
-      <div class="check-sec">
-        <div class="check-sec-title">🚗 Cab Checks</div>
+
+      <div class="check-block">
+        <div class="check-block-hdr">
+          <div class="check-block-title">🚗 Cab &amp; Controls</div>
+          <div class="check-block-ref">CWI p.15 · W1</div>
+        </div>
         <div class="check-grid">
-          <div class="ci"><input type="checkbox" id="mc-cabTrash"><label for="mc-cabTrash">Empty Bottles/Trash Removed?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-cabLights"><label for="mc-cabLights">All Light Buttons Working?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-cabWindscreen"><label for="mc-cabWindscreen">Windscreen OK?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-cabWipers"><label for="mc-cabWipers">Wipers Working (Front &amp; Rear)?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-cabHorn"><label for="mc-cabHorn">Horn Working?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-cabFwd"><label for="mc-cabFwd">Forward Movement OK?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-cabBack"><label for="mc-cabBack">Backward Movement OK?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-cabParkBrake"><label for="mc-cabParkBrake">Park Brake Test?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-cabDoorBuzz"><label for="mc-cabDoorBuzz">Driver Door Buzzer / Park Brake Interlock?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-cabWindows"><label for="mc-cabWindows">All Windows &amp; Roof Window Closed?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-cabDoors"><label for="mc-cabDoors">Doors Closed?</label></div>
-          <div class="ci"><input type="checkbox" id="mc-cabFireExt"><label for="mc-cabFireExt">Fire Extinguisher In Place, Not Expired?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-cabTrash"><label for="mc-cabTrash">Empty Bottles / Rubbish Removed?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-cabLights"><label for="mc-cabLights">All Light Buttons Working? <span class="ref">(Check W1)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-cabWindscreen"><label for="mc-cabWindscreen">Windscreen OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-cabWipers"><label for="mc-cabWipers">Wipers Working — Front &amp; Rear?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-cabHorn"><label for="mc-cabHorn">Horn Working?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-cabFwd"><label for="mc-cabFwd">Forward Movement OK? <span class="warn-tag">BLADE &amp; TILLER UP FIRST</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-cabBack"><label for="mc-cabBack">Backward Movement OK?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-cabParkBrake"><label for="mc-cabParkBrake">Park Brake Test OK? <span class="warn-tag">SAFETY</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-cabDoorBuzz"><label for="mc-cabDoorBuzz">Driver Door Buzzer / Park Brake Interlock? <span class="warn-tag">SAFETY</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-cabWindows"><label for="mc-cabWindows">All Windows &amp; Roof Window Closed?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-cabDoors"><label for="mc-cabDoors">Doors Closed?</label></div>
+          <div class="check-item"><input type="checkbox" id="mc-cabFireExt"><label for="mc-cabFireExt">Fire Extinguisher In Place, Not Expired? <span class="warn-tag">SAFETY</span></label></div>
         </div>
       </div>
-      <div style="display:flex;gap:9px;margin-top:6px;margin-bottom:12px;">
-        <button class="btn btn-s btn-sm" onclick="selectAll('form-mc')">✓ Select All</button>
-        <button class="btn btn-s btn-sm" onclick="clearAll('form-mc')">✗ Clear All</button>
+
+      <div class="check-block">
+        <div class="check-block-hdr">
+          <div class="check-block-title">🔋 Electrical</div>
+          <div class="check-block-ref">CWI p.15 · W1</div>
+        </div>
+        <div class="check-grid">
+          <div class="check-item"><input type="checkbox" id="mc-elecCable"><label for="mc-elecCable">All Electric Cable Connections Secure &amp; Corrosion-Free? <span class="ref">(Apply contact spray if needed)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-elecBatt"><label for="mc-elecBatt">Battery Acid Level OK — Topped Up with Distilled Water? <span class="ref">(Every 100 hrs)</span></label></div>
+        </div>
       </div>
-      <div class="fg"><label>Notes / Findings</label><textarea id="mc-notes" placeholder="Faults found, parts replaced, work performed…"></textarea></div>
-      <div style="display:flex;gap:9px;margin-top:14px;">
-        <button class="btn btn-p" onclick="submitMC()">✓ Submit Mechanical Check</button>
-        <button class="btn btn-s" onclick="clearMCForm()">Clear</button>
+
+      <div class="check-block">
+        <div class="check-block-hdr">
+          <div class="check-block-title">⚡ Winch System — Pre-Operation Checks</div>
+          <div class="check-block-ref">Winch OM p.25 · CAUTION: Currently Non-Operational</div>
+        </div>
+        <div style="padding:10px 12px 4px;background:#fff">
+          <div class="winch-alert" style="margin-bottom:10px">
+            <div class="winch-alert-icon" style="font-size:16px">⚠️</div>
+            <div class="winch-alert-body">
+              <h4 style="font-size:11px">Winch Currently Fully Non-Operational</h4>
+              <p style="font-size:12px">Do not attempt operation. Complete checks for inspection purposes only.</p>
+            </div>
+          </div>
+        </div>
+        <div class="check-grid">
+          <div class="check-item"><input type="checkbox" id="mc-winchSnow"><label for="mc-winchSnow">Snow &amp; Ice Removed from Winch Frame? <span class="ref">(Winch OM p.25)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-winchFasten"><label for="mc-winchFasten">Winch Fasteners OK? <span class="ref">(M_A = 500 Nm — Winch OM p.25)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-winchBrake"><label for="mc-winchBrake">Slewing-Gear Holding Brake Inspected? <span class="ref">(Winch OM p.25)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-winchHydLines"><label for="mc-winchHydLines">Hydraulic Lines &amp; Connectors — No Leaks or Chafing? <span class="ref">(Winch OM p.25)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-winchGuideArm"><label for="mc-winchGuideArm">Cable Guide Arm Moves Freely on Windlass? <span class="ref">(Winch OM p.25)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-winchViewScreen"><label for="mc-winchViewScreen">Cable Winding Viewing Screen Clean? <span class="ref">(Winch OM p.25)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-winchSafetyLock"><label for="mc-winchSafetyLock">Safety Lock #3 Operation Checked? <span class="ref">(Winch OM p.25)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-winchRelayRollers"><label for="mc-winchRelayRollers">Cable Relay Rollers — Free Movement in Boom &amp; Guide Arm? <span class="ref">(Winch OM p.25)</span></label></div>
+          <div class="check-item"><input type="checkbox" id="mc-winchGuideGrease"><label for="mc-winchGuideGrease">Guide Roll Greased — Nipple &amp; Shaft? <span class="ref">(Winch OM p.27 · Aviacal 2LD KP2K-30)</span></label></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin:8px 0 12px">
+        <button class="btn btn-secondary btn-sm" onclick="selectAll('form-mc')">✓ Select All</button>
+        <button class="btn btn-secondary btn-sm" onclick="clearAll('form-mc')">✗ Clear All</button>
+      </div>
+      <div class="fg"><label>Notes / Findings</label><textarea id="mc-notes" placeholder="Faults found, parts replaced, work performed, observations…"></textarea></div>
+      <div style="display:flex;gap:10px;margin-top:16px">
+        <button class="btn btn-primary" onclick="submitMC()">✓ Submit Mechanical Check</button>
+        <button class="btn btn-secondary" onclick="clearMCForm()">Clear</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══ SUBMISSION LOG ═══════════════════════════════════════════════════ -->
+<!-- ═══ SUBMISSION LOG ════════════════════════════════════════════════════ -->
 <div class="tab-content" id="tab-sublog">
-  <div class="sec-hdr"><h2>Submission <span>Log</span></h2>
-    <button class="btn btn-s btn-sm" onclick="loadSubLog()">↻ Refresh</button>
+  <div class="sec-hdr">
+    <h2>Submission <span>Log</span></h2>
+    <button class="btn btn-secondary btn-sm" onclick="loadSubLog()">↻ Refresh</button>
   </div>
   <div class="fbar">
     <input type="text" id="sl-q" placeholder="Search name, notes, area…" oninput="filterSL()">
     <select id="sl-type" onchange="filterSL()"><option value="">All Types</option><option>Operator</option><option>Mechanical</option></select>
     <input type="date" id="sl-from" onchange="filterSL()">
     <input type="date" id="sl-to" onchange="filterSL()">
-    <button class="btn btn-s btn-sm" onclick="clearSLFilters()">Clear</button>
+    <button class="btn btn-secondary btn-sm" onclick="clearSLFilters()">Clear</button>
   </div>
   <div class="card"><div class="tw">
     <table><thead><tr><th>Date</th><th>Type</th><th>Name</th><th>Hour Meter</th><th>Area / Slope</th><th>Fuel (L)</th><th>Notes</th></tr></thead>
-      <tbody id="sl-body"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:22px">Loading…</td></tr></tbody>
+      <tbody id="sl-body"><tr><td colspan="7" style="text-align:center;color:var(--text3);padding:24px">Loading…</td></tr></tbody>
     </table>
   </div></div>
 </div>
 
-<!-- ═══ MAINTENANCE MASTER ══════════════════════════════════════════════ -->
+<!-- ═══ MAINTENANCE MASTER ════════════════════════════════════════════════ -->
 <div class="tab-content" id="tab-maintenance">
-  <div class="sec-hdr"><h2>Maintenance <span>Master</span></h2>
-    <div style="display:flex;gap:9px;">
-      <button class="btn btn-s btn-sm" onclick="loadMaintMaster()">↻ Refresh</button>
-      <button class="btn btn-p btn-sm" onclick="openNewMaint()">+ Add Record</button>
+  <div class="sec-hdr">
+    <h2>Maintenance <span>Master</span></h2>
+    <div style="display:flex;gap:9px">
+      <button class="btn btn-secondary btn-sm" onclick="loadMaintMaster()">↻ Refresh</button>
+      <button class="btn btn-primary btn-sm" onclick="openNewMaint()">+ Add Record</button>
     </div>
   </div>
-  <div class="stats-row" style="margin-bottom:14px;">
-    <div class="sc b"><div class="sl">Total Records</div><div class="sv" id="mm-total">—</div></div>
-    <div class="sc r"><div class="sl">Breakdowns</div><div class="sv" id="mm-bd">—</div></div>
-    <div class="sc a"><div class="sl">Scheduled</div><div class="sv" id="mm-sc">—</div></div>
-    <div class="sc am"><div class="sl">With Follow-up</div><div class="sv" id="mm-fu">—</div></div>
-    <div class="sc g"><div class="sl">Total Downtime</div><div class="sv" id="mm-dt">—</div><div class="ss">Hours</div></div>
+  <div class="stat-grid" style="grid-template-columns:repeat(5,1fr)">
+    <div class="stat-card blue"><div class="lbl">Total Records</div><div class="val" id="mm-total">—</div></div>
+    <div class="stat-card red"><div class="lbl">Breakdowns</div><div class="val" id="mm-bd">—</div></div>
+    <div class="stat-card amber"><div class="lbl">Scheduled</div><div class="val" id="mm-sc">—</div></div>
+    <div class="stat-card grey"><div class="lbl">With Follow-up</div><div class="val" id="mm-fu">—</div></div>
+    <div class="stat-card green"><div class="lbl">Total Downtime</div><div class="val" id="mm-dt">—</div><div class="sub">Hours</div></div>
   </div>
   <div class="fbar">
     <input type="text" id="mm-q" placeholder="Search description, category…" oninput="filterMM()">
     <select id="mm-season" onchange="filterMM()"><option value="">All Seasons</option><option>Winter</option><option>Summer</option></select>
-    <select id="mm-type" onchange="filterMM()"><option value="">All Types</option><option value="Scheduled / Preventive">Scheduled</option><option value="Breakdown / Repair">Breakdown</option><option value="Inspection Only">Inspection</option></select>
+    <select id="mm-type" onchange="filterMM()">
+      <option value="">All Types</option>
+      <option value="Scheduled / Preventive">Scheduled</option>
+      <option value="Breakdown / Repair">Breakdown</option>
+      <option value="Inspection Only">Inspection</option>
+    </select>
     <select id="mm-cat" onchange="filterMM()">
       <option value="">All Categories</option>
       <option>Engine</option><option>Hydraulics</option>
       <option value="Undercarriage / Wheels / Tracks">Undercarriage / Tracks</option>
       <option>Electrical</option><option>Cooling System</option>
-      <option>Transmission / Drive</option><option value="Snow Blade / Attachments">Blade</option><option>Other</option>
+      <option>Transmission / Drive</option>
+      <option value="Snow Blade / Attachments">Blade</option>
+      <option>Winch</option><option>Other</option>
     </select>
-    <select id="mm-status" onchange="filterMM()"><option value="">All Statuses</option><option value="Fully Operational">Fully Operational</option><option value="Operational with observation">With Observation</option><option value="Not cleared for use">Not Cleared</option></select>
-    <button class="btn btn-s btn-sm" onclick="clearMMFilters()">Clear</button>
+    <select id="mm-status" onchange="filterMM()">
+      <option value="">All Statuses</option>
+      <option value="Fully Operational">Operational</option>
+      <option value="Operational with observation">With Observation</option>
+      <option value="Not cleared for use">Not Cleared</option>
+    </select>
+    <button class="btn btn-secondary btn-sm" onclick="clearMMFilters()">Clear</button>
   </div>
   <div class="card"><div class="tw">
     <table><thead><tr><th>#</th><th>Date</th><th>Season</th><th>Category</th><th>Type</th><th>Hours</th><th>Work Summary</th><th>Parts</th><th>By</th><th>Downtime</th><th>Status</th></tr></thead>
-      <tbody id="mm-body"><tr><td colspan="11" style="text-align:center;color:var(--muted);padding:22px">Loading…</td></tr></tbody>
+      <tbody id="mm-body"><tr><td colspan="11" style="text-align:center;color:var(--text3);padding:24px">Loading…</td></tr></tbody>
     </table>
   </div></div>
 </div>
 
-<!-- ═══ MAINTENANCE TIMELINE ════════════════════════════════════════════ -->
+<!-- ═══ MAINTENANCE TIMELINE ══════════════════════════════════════════════ -->
 <div class="tab-content" id="tab-timeline">
-  <div class="sec-hdr"><h2>Maintenance <span>Timeline</span></h2>
-    <button class="btn btn-s btn-sm" onclick="loadTimeline()">↻ Refresh</button>
+  <div class="sec-hdr">
+    <h2>Maintenance <span>Timeline</span></h2>
+    <button class="btn btn-secondary btn-sm" onclick="loadTimeline()">↻ Refresh</button>
   </div>
   <div class="fbar">
     <select id="tl-season" onchange="filterTL()"><option value="">All Seasons</option><option>Winter</option><option>Summer</option></select>
-    <select id="tl-type" onchange="filterTL()"><option value="">All Types</option><option value="Scheduled / Preventive">Scheduled</option><option value="Breakdown / Repair">Breakdown</option><option value="Inspection Only">Inspection</option></select>
+    <select id="tl-type" onchange="filterTL()">
+      <option value="">All Types</option>
+      <option value="Scheduled / Preventive">Scheduled</option>
+      <option value="Breakdown / Repair">Breakdown</option>
+      <option value="Inspection Only">Inspection</option>
+    </select>
     <input type="date" id="tl-from" onchange="filterTL()">
     <input type="date" id="tl-to" onchange="filterTL()">
   </div>
-  <div id="tl-wrap" style="max-width:820px">
-    <div style="text-align:center;color:var(--muted);padding:40px">Loading timeline…</div>
+  <div class="card">
+    <div id="tl-wrap" style="max-height:700px;overflow-y:auto">
+      <div style="text-align:center;color:var(--text3);padding:40px">Loading timeline…</div>
+    </div>
   </div>
 </div>
 
-<!-- ═══ CONFIG (PIN-LOCKED) ═════════════════════════════════════════════ -->
+<!-- ═══ SERVICE SCHEDULE ══════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-schedule">
+  <div class="sec-hdr"><h2>PistenBully 400 <span>Service Schedule</span></h2>
+    <span style="font-size:11px;color:var(--text3);font-family:var(--mono)">Source: Customer's Workshop Information (CWI) + Drum Winch OM</span>
+  </div>
+
+  <div class="card" style="margin-bottom:18px">
+    <div class="card-hdr">
+      <div class="card-hdr-title"><div class="icon icon-red">📐</div>Maintenance Interval Reference — Engine, Fluids &amp; Filters</div>
+    </div>
+    <div class="tw">
+      <table class="sched-table">
+        <thead><tr>
+          <th>System / Component</th>
+          <th>Specification / Grade</th>
+          <th>Capacity</th>
+          <th class="interval-cell">Interval</th>
+          <th>Who</th>
+          <th>Ref</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><strong>Engine Oil</strong> — Cummins QSL9</td><td>CES 20072 / SAE 10W40 API-CH4</td><td>26.5 L</td><td class="interval-cell">500 hrs / annually</td><td><span class="badge b-amber">Customer</span></td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.16 S2</td></tr>
+          <tr><td><strong>Fuel Filter</strong></td><td>Cummins spec</td><td>—</td><td class="interval-cell">500 hrs / annually</td><td><span class="badge b-amber">Customer</span></td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.16</td></tr>
+          <tr><td><strong>Air Filter — Clean</strong></td><td>—</td><td>—</td><td class="interval-cell">Every 200 hrs</td><td><span class="badge b-amber">Customer</span></td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.13</td></tr>
+          <tr><td><strong>Air Filter — Replace</strong></td><td>—</td><td>—</td><td class="interval-cell">1200 hrs / annually</td><td><span class="badge b-amber">Customer</span></td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.13</td></tr>
+          <tr><td><strong>Hydraulic Fluid</strong></td><td>HVLP DIN 51524 / Dexron III F / ATF Type A</td><td>47 L tank / 80 L total</td><td class="interval-cell">1200 hrs / annually</td><td><span class="badge b-blue">Kässbohrer</span></td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.16 S3</td></tr>
+          <tr><td><strong>Hydraulic Oil Filter</strong></td><td>—</td><td>—</td><td class="interval-cell">100 hrs (new) / 1200 hrs</td><td><span class="badge b-amber">Customer</span></td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.16</td></tr>
+          <tr><td><strong>Transfer Box Oil</strong></td><td>PAO CLP HC VG150 / SAE 75W90 API GL4</td><td>2.4 L</td><td class="interval-cell">800 hrs / annually</td><td><span class="badge b-amber">Customer</span></td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.16</td></tr>
+          <tr><td><strong>Wheel Drive Oil</strong> (Planetary Gears)</td><td>PAO CLP HC VG150 / SAE 75W90 API GL4</td><td>4.5 L</td><td class="interval-cell">400 hrs / annually</td><td><span class="badge b-amber">Customer</span></td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.16 S2</td></tr>
+          <tr><td><strong>Coolant</strong></td><td>50% water + 50% antifreeze — Protection to -40°C</td><td>30 L</td><td class="interval-cell">Every 3 years</td><td><span class="badge b-amber">Customer</span></td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.6</td></tr>
+          <tr><td><strong>Water Filter</strong> (Coolant)</td><td>SP No. 8.312.105.021.0</td><td>—</td><td class="interval-cell">500 hrs / annually</td><td><span class="badge b-amber">Customer</span></td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.16</td></tr>
+          <tr><td><strong>Auxiliary Machinery Gear Oil</strong> (Tiller)</td><td>PAO VG150 / SAE 75W90</td><td>—</td><td class="interval-cell">Every 800 hrs</td><td><span class="badge b-amber">Customer</span></td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.17</td></tr>
+          <tr><td><strong>Valve Clearances</strong></td><td>Engine temp below 50°C</td><td>—</td><td class="interval-cell">5000 hrs / 4 years</td><td><span class="badge b-blue">Kässbohrer</span></td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.13</td></tr>
+          <tr><td><strong>High-Pressure Hoses</strong> (Hydrostatic Drive)</td><td>—</td><td>—</td><td class="interval-cell">Every 3 years</td><td><span class="badge b-blue">Kässbohrer</span></td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.14</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:18px">
+    <div class="card-hdr">
+      <div class="card-hdr-title"><div class="icon icon-amber">🔩</div>Greasing &amp; Lubrication Schedule</div>
+    </div>
+    <div class="tw">
+      <table class="sched-table">
+        <thead><tr>
+          <th>Lubrication Point</th>
+          <th>Grease Specification</th>
+          <th class="interval-cell">Interval</th>
+          <th>Notes</th>
+          <th>Ref</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><strong>All General Lubrication Points</strong></td><td>Calcium saponified grease — Aviacal 2 LD, KP2K-30 DIN 51502</td><td class="interval-cell">Every 100 hrs</td><td>Water-resistant; clean nipples before greasing; max 400 bar pressure gun</td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.5</td></tr>
+          <tr><td><strong>Track Tension Device</strong></td><td>Calcium saponified grease — Aviacal 2 LD</td><td class="interval-cell">Every 100 hrs</td><td>Grease at every S1 service</td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.17</td></tr>
+          <tr><td><strong>Wheel Hubs &amp; Radius Arms</strong></td><td>Calcium saponified grease — Aviacal 2 LD</td><td class="interval-cell">Every 400 hrs</td><td>Lubricate hubs and radius arms at S2 service</td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.17 S2</td></tr>
+          <tr><td><strong>Wheel Hub Full Overhaul</strong></td><td>Calcium saponified grease — Aviacal 2 LD</td><td class="interval-cell">Every 1200 hrs</td><td>Remove all hubs — clean, check, regrease taper roller bearings, repack chamber, check seals</td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.17 S3</td></tr>
+          <tr><td><strong>Radius Arms — Full Remove &amp; Regrease</strong></td><td>Calcium saponified grease — Aviacal 2 LD</td><td class="interval-cell">Every 1200 hrs</td><td>Remove, clean, check, regrease</td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.17 S3</td></tr>
+          <tr><td><strong>Tiller Spiral-Bevel Coupling</strong></td><td>Avialith 2F / OKS 400 / Molykote BR 2</td><td class="interval-cell">Every 1200 hrs</td><td>Do not mix with calcium saponified grease</td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.5</td></tr>
+          <tr><td><strong>Auxiliary Machinery Bearings</strong></td><td>Calcium saponified grease — Aviacal 2 LD</td><td class="interval-cell">Every 400 hrs</td><td>Check bearings and lubricate</td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.17</td></tr>
+          <tr><td><strong>Adapter Frame &amp; Auxiliary Machinery</strong></td><td>Calcium saponified grease — Aviacal 2 LD</td><td class="interval-cell">Every 100 hrs</td><td>Every S1</td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.17</td></tr>
+          <tr><td><strong>Drive Shaft Splines</strong> (Pump, Motor, Transmission, Tiller)</td><td>Assembly paste OKS 250 — SP No. 0.946.158.000</td><td class="interval-cell">On disassembly</td><td>Apply to splines on reassembly</td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.5</td></tr>
+          <tr><td><strong>Battery Terminals</strong></td><td>Acid-proof grease — Bosch Ft. 40 V1 (SP No. 0.946.308.000.0)</td><td class="interval-cell">Every 100 hrs</td><td>Check acid level at same time; top with distilled water only</td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">CWI p.5</td></tr>
+          <tr><td><strong>Winch Guide Roll</strong> (Nipple &amp; Shaft)</td><td>Calcium saponified grease — Aviacal 2 LD KP2K-30 DIN 51502</td><td class="interval-cell">Before each operation</td><td>Grease nipple 9 and shaft 8. Do not mix grease types on guide roll.</td><td style="color:var(--text3);font-size:11px;font-family:var(--mono)">Winch OM p.27</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-hdr-title"><div class="icon icon-blue">📋</div>100-Hour Service Checklist Reference — W1 / S1</div>
+    </div>
+    <div class="tw">
+      <table class="sched-table">
+        <thead><tr>
+          <th style="width:40px">WA</th><th style="width:40px">W1</th><th style="width:40px">W2</th><th style="width:40px">W3</th>
+          <th>Maintenance Item</th><th>Section</th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot n">·</div></td><td class="dot-cell"><div class="sched-dot n">·</div></td><td class="dot-cell"><div class="sched-dot n">·</div></td><td>Engine test run — noises, smoke, running gear, instruments, parking brake</td><td><span class="badge b-grey">Engine</span></td></tr>
+          <tr><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot n">·</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td>Threaded fasteners — engine, engine mounts, intake &amp; exhaust systems</td><td><span class="badge b-grey">Engine</span></td></tr>
+          <tr><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot n">·</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td>Belt drives — condition and tension</td><td><span class="badge b-grey">Engine</span></td></tr>
+          <tr><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot n">·</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td>Cooling &amp; heating — fasteners, leaks, chafing; clean radiator heat-exchanger surfaces</td><td><span class="badge b-grey">Cooling</span></td></tr>
+          <tr><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td>Hydraulics — heat-exchanger surfaces clean; pipe connectors for leaks</td><td><span class="badge b-grey">Hydraulics</span></td></tr>
+          <tr><td class="dot-cell"><div class="sched-dot n">·</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td>Check hydraulic hoses for leaks</td><td><span class="badge b-grey">Hydraulics</span></td></tr>
+          <tr><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td>Drive axle — fasteners; check parking brake operation</td><td><span class="badge b-grey">Drive</span></td></tr>
+          <tr><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td>Tracks — tension device fasteners, track tension, cleats &amp; ice picks (do not retighten — replace)</td><td><span class="badge b-grey">Tracks</span></td></tr>
+          <tr><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot n">·</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td>Tracks — fasteners (tightening torque) of guides; spring rod threaded pins</td><td><span class="badge b-grey">Tracks</span></td></tr>
+          <tr><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot n">·</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td>Electrical — lighting system; all cable connections secure &amp; clean</td><td><span class="badge b-grey">Electrical</span></td></tr>
+          <tr><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td>Auxiliary driven machinery — frame, pipe connections, fasteners, hoses, leaks</td><td><span class="badge b-grey">Tiller</span></td></tr>
+          <tr><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td class="dot-cell"><div class="sched-dot y">●</div></td><td>Hydraulic pressures of entire system — check &amp; adjust; enter in test log <em style="color:var(--text3);font-size:11px">(W3 / Kässbohrer)</em></td><td><span class="badge b-grey">Hydraulics</span></td></tr>
+          <tr><td colspan="4"></td><td colspan="2" style="font-size:11px;color:var(--text3);font-family:var(--mono);padding:8px 16px">WA = First 100 hrs (new vehicle) · W1 = Every 100 hrs · W2 = Every 400 hrs · W3 = Every 1200 hrs or annually. ● = Required at this interval. · = Not required.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ WINCH STATUS ═══════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-winch">
+  <div class="sec-hdr"><h2>Winch System <span>Status</span></h2></div>
+
+  <div class="winch-alert" style="border-color:rgba(204,34,17,0.4)">
+    <div class="winch-alert-icon">🔴</div>
+    <div class="winch-alert-body">
+      <h4>WINCH FULLY NON-OPERATIONAL — Do Not Attempt to Use</h4>
+      <p>All winch functions ceased operation after installation of replacement parts (Mooring Governor Art. 8.026.091.000.2 + Proportional Valve Art. 8.026.091.096.0). Root cause of complete failure unknown. PistenBully specialist Xristos scheduled for on-site assessment. Full 2026 parts list (Ref: 290083212) being ordered prior to his arrival.</p>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card red"><div class="lbl">Manual Slew L/R</div><div class="val" style="font-size:28px;color:var(--red)">✗ OFF</div><div class="sub">Was: Working Oct 2021</div></div>
+    <div class="stat-card red"><div class="lbl">Park Brake</div><div class="val" style="font-size:28px;color:var(--red)">✗ OFF</div><div class="sub">Was: Working Oct 2021</div></div>
+    <div class="stat-card red"><div class="lbl">Despool / Release</div><div class="val" style="font-size:28px;color:var(--red)">✗ OFF</div><div class="sub">Was: Working Oct 2021</div></div>
+    <div class="stat-card red"><div class="lbl">Tension / Respool</div><div class="val" style="font-size:28px;color:var(--red)">✗ OFF</div><div class="sub">Never worked — 2017</div></div>
+    <div class="stat-card amber"><div class="lbl">Xristos Assessment</div><div class="val" style="font-size:22px;color:var(--accent)">PENDING</div><div class="sub">2026 parts being ordered</div></div>
+    <div class="stat-card amber"><div class="lbl">H10 Alarm</div><div class="val" style="font-size:22px;color:var(--accent)">WAS ON</div><div class="sub">Confirmed by Gabriel</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-hdr"><div class="card-hdr-title"><div class="icon icon-amber">🔧</div>Parts Fitted — No Resolution</div></div>
+      <table><thead><tr><th>Article No.</th><th>Description</th><th>Date</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td style="font-family:var(--mono);font-size:11px;color:var(--blue2)">8.025.976.846.0</td><td>Solenoid Direction Valve</td><td style="font-size:12px;color:var(--text3)">Nov 2021</td><td><span class="badge b-amber">Fitted</span></td></tr>
+          <tr><td style="font-family:var(--mono);font-size:11px;color:var(--blue2)">8.026.183.265.0</td><td>Directional Control Valve</td><td style="font-size:12px;color:var(--text3)">Nov 2021</td><td><span class="badge b-amber">Fitted</span></td></tr>
+          <tr><td style="font-family:var(--mono);font-size:11px;color:var(--blue2)">8.026.091.096.0</td><td>Proportional Valve</td><td style="font-size:12px;color:var(--text3)">2021/22</td><td><span class="badge b-red">No Change</span></td></tr>
+          <tr><td style="font-family:var(--mono);font-size:11px;color:var(--blue2)">8.026.091.000.2</td><td>Mooring Governor</td><td style="font-size:12px;color:var(--text3)">Post-Gabriel</td><td><span class="badge b-red">Made Worse</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-hdr-title"><div class="icon icon-blue">📦</div>2026 Parts Ordered (Ref: 290083212)</div></div>
+      <table><thead><tr><th>Article No.</th><th>Description</th><th>Location</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td style="font-family:var(--mono);font-size:11px;color:var(--blue2)">8.026.091.000.0</td><td>Mooring Regulator</td><td style="font-size:11px;color:var(--text3)">Winch</td><td><span class="badge b-amber">Ordered</span></td></tr>
+          <tr><td style="font-family:var(--mono);font-size:11px;color:var(--blue2)">8.461.000.356.0</td><td>Winch Tension Indicator</td><td style="font-size:11px;color:var(--text3)">Cab — Joystick (Pos. 212)</td><td><span class="badge b-grey">Planned</span></td></tr>
+          <tr><td style="font-family:var(--mono);font-size:11px;color:var(--blue2)">8.026.185.225.0</td><td>Joystick Handle Control</td><td style="font-size:11px;color:var(--text3)">Cab — Dash (Pos. 215)</td><td><span class="badge b-grey">Planned</span></td></tr>
+          <tr><td style="font-family:var(--mono);font-size:11px;color:var(--blue2)">7.423.041.000.0</td><td>Winch Electronic Card</td><td style="font-size:11px;color:var(--text3)">Cab — Dash (Pos. 206)</td><td><span class="badge b-grey">Planned</span></td></tr>
+          <tr><td style="font-family:var(--mono);font-size:11px;color:var(--blue2)">8.026.154.251.0</td><td>Rotator / Slip Ring Winch</td><td style="font-size:11px;color:var(--text3)">Winch</td><td><span class="badge b-grey">Planned</span></td></tr>
+          <tr><td style="font-family:var(--mono);font-size:11px;color:var(--blue2)">8.026.036.006.0</td><td>Magnetic Valve</td><td style="font-size:11px;color:var(--text3)">Winch Mag Block MV1</td><td><span class="badge b-grey">Planned</span></td></tr>
+          <tr><td style="font-family:var(--mono);font-size:11px;color:var(--blue2)">7.331.402.000.0</td><td>Rocker Switch</td><td style="font-size:11px;color:var(--text3)">Electrical</td><td><span class="badge b-grey">Planned</span></td></tr>
+          <tr><td style="font-family:var(--mono);font-size:11px;color:var(--blue2)">8.743.832.000.0</td><td>Potentiometer</td><td style="font-size:11px;color:var(--text3)">Cab — Tiller Up/Down</td><td><span class="badge b-grey">Verify w/ Asif</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hdr"><div class="card-hdr-title"><div class="icon icon-red">📖</div>Winch Pre-Operation Checklist Reference — Drum Winch OM p.25</div></div>
+    <div style="padding:16px 18px">
+      <p style="font-size:12px;color:var(--text3);margin-bottom:14px;font-style:italic">The following checks are mandated by the PistenBully 400 W Drum Winch Operating Manual before each winch operation session. These are for reference and are included in the Mechanical Check form above.</p>
+      <div class="check-grid" style="padding:0">
+        <div style="padding:8px 12px;background:#f4f6f9;border:0.5px solid var(--border);border-radius:6px;margin:3px">
+          <div style="font-family:var(--cond);font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Step 1</div>
+          <div style="font-size:13px">Remove snow and ice from winch</div>
+        </div>
+        <div style="padding:8px 12px;background:#f4f6f9;border:0.5px solid var(--border);border-radius:6px;margin:3px">
+          <div style="font-family:var(--cond);font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Step 2</div>
+          <div style="font-size:13px">Check winch fasteners (1) — Tightening torque M<sub>A</sub> = 500 Nm</div>
+        </div>
+        <div style="padding:8px 12px;background:#f4f6f9;border:0.5px solid var(--border);border-radius:6px;margin:3px">
+          <div style="font-family:var(--cond);font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Step 3</div>
+          <div style="font-size:13px">Check operation of slewing-gear holding brake</div>
+        </div>
+        <div style="padding:8px 12px;background:#f4f6f9;border:0.5px solid var(--border);border-radius:6px;margin:3px">
+          <div style="font-family:var(--cond);font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Step 4</div>
+          <div style="font-size:13px">Check hydraulic lines &amp; connectors — free of leaks and chafing</div>
+        </div>
+        <div style="padding:8px 12px;background:#f4f6f9;border:0.5px solid var(--border);border-radius:6px;margin:3px">
+          <div style="font-family:var(--cond);font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Step 5</div>
+          <div style="font-size:13px">Check cable guide arm moves freely on windlass</div>
+        </div>
+        <div style="padding:8px 12px;background:#f4f6f9;border:0.5px solid var(--border);border-radius:6px;margin:3px">
+          <div style="font-family:var(--cond);font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Step 6</div>
+          <div style="font-size:13px">Clean viewing screen for winch cable winding</div>
+        </div>
+        <div style="padding:8px 12px;background:#f4f6f9;border:0.5px solid var(--border);border-radius:6px;margin:3px">
+          <div style="font-family:var(--cond);font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Step 7</div>
+          <div style="font-size:13px">Check operation of safety lock (3)</div>
+        </div>
+        <div style="padding:8px 12px;background:#f4f6f9;border:0.5px solid var(--border);border-radius:6px;margin:3px">
+          <div style="font-family:var(--cond);font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Step 8</div>
+          <div style="font-size:13px">Check ease of movement — cable relay rollers in winch boom and cable guide arm</div>
+        </div>
+        <div style="padding:8px 12px;background:#f4f6f9;border:0.5px solid var(--border);border-radius:6px;margin:3px">
+          <div style="font-family:var(--cond);font-size:10px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Step 9</div>
+          <div style="font-size:13px">Grease guide roll — nipple (9) and shaft (8) with Aviacal 2 LD (KP2K-30 DIN 51502)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONFIG ════════════════════════════════════════════════════════════ -->
 <div class="tab-content" id="tab-config">
   <div id="cfg-locked">
-    <div class="locked">
+    <div class="locked-screen">
       <div class="lock-icon">🔒</div>
       <h3>Maintenance Configuration</h3>
       <p>SNR Technical Manager / GM access only.</p>
-      <button class="btn btn-p" onclick="openPIN()">Enter PIN</button>
+      <button class="btn btn-primary" onclick="openPIN()">Enter PIN</button>
     </div>
   </div>
   <div id="cfg-unlocked" style="display:none">
     <div class="sec-hdr">
       <h2>Maintenance <span>Configuration</span></h2>
-      <div style="display:flex;gap:9px;">
-        <button class="btn btn-p btn-sm" onclick="showAddTask()">+ Add Task</button>
-        <button class="btn btn-d btn-sm" onclick="lockCfg()">🔒 Lock</button>
+      <div style="display:flex;gap:9px">
+        <button class="btn btn-primary btn-sm" onclick="showAddTask()">+ Add Task</button>
+        <button class="btn btn-secondary btn-sm" style="color:var(--red);border-color:rgba(229,62,62,0.3)" onclick="lockCfg()">🔒 Lock</button>
       </div>
     </div>
-    <div id="cfg-msg"></div>
-    <!-- Add task form (hidden by default) -->
-    <div class="form-card" id="add-task-form" style="display:none;margin-bottom:16px;">
-      <h3>+ New Maintenance Task</h3>
-      <div class="frow">
+    <div class="msg" id="cfg-msg"></div>
+    <div class="form-card" id="add-task-form" style="display:none;margin-bottom:16px">
+      <div class="form-title">+ New Maintenance Task</div>
+      <div class="form-row">
         <div class="fg"><label>Task Name</label><input type="text" id="cfg-name" placeholder="e.g. Engine Oil Change"></div>
         <div class="fg"><label>Interval (Hours)</label><input type="number" id="cfg-interval" placeholder="250"></div>
         <div class="fg"><label>Last Done At (Hours)</label><input type="number" id="cfg-lastdone" placeholder="7135"></div>
         <div class="fg"><label>Notify Before (Hours)</label><input type="number" id="cfg-notify" placeholder="20"></div>
         <div class="fg"><label>Assigned To</label><input type="text" id="cfg-assigned" placeholder="Workshop"></div>
-        <div class="fg"><label>Notes</label><input type="text" id="cfg-notes" placeholder="Optional"></div>
+        <div class="fg"><label>Notes / Manual Ref</label><input type="text" id="cfg-notes" placeholder="e.g. CWI p.16 · SAE 10W40"></div>
       </div>
-      <div style="display:flex;gap:9px;">
-        <button class="btn btn-p" onclick="addConfigTask()">Save Task</button>
-        <button class="btn btn-s" onclick="hideAddTask()">Cancel</button>
+      <div style="display:flex;gap:9px">
+        <button class="btn btn-primary" onclick="addConfigTask()">Save Task</button>
+        <button class="btn btn-secondary" onclick="hideAddTask()">Cancel</button>
       </div>
     </div>
     <div class="card">
-      <div class="card-hdr"><span>⚙️ Scheduled Maintenance Tasks</span></div>
+      <div class="card-hdr"><div class="card-hdr-title"><div class="icon icon-amber">⚙️</div>Scheduled Maintenance Tasks</div></div>
       <div class="tw">
-        <table><thead><tr><th>Active</th><th>Task Name</th><th>Interval</th><th>Last Done</th><th>Next Due</th><th>Notify Before</th><th>Assigned To</th><th>Remaining</th><th>Status</th><th>Action</th></tr></thead>
-          <tbody id="cfg-body"><tr><td colspan="10" style="text-align:center;color:var(--muted);padding:20px">Loading…</td></tr></tbody>
+        <table><thead><tr>
+          <th>Active</th><th>Task Name</th><th>Interval</th><th>Last Done</th><th>Next Due</th>
+          <th>Notify Before</th><th>Assigned To</th><th>Remaining</th><th>Status</th><th>Action</th>
+        </tr></thead>
+          <tbody id="cfg-body"><tr><td colspan="10" style="text-align:center;color:var(--text3);padding:20px">Loading…</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -528,30 +1539,37 @@
 <!-- PIN MODAL -->
 <div class="mo" id="pin-mo">
   <div class="mo-box">
-    <h3>🔒 Enter PIN</h3>
-    <p style="color:var(--muted);font-size:13px;margin-bottom:12px">SNR Technical Manager / GM access required.</p>
+    <div class="mo-title">🔒 Enter PIN</div>
+    <p style="color:var(--text3);font-size:13px;margin-bottom:14px">SNR Technical Manager / GM access required.</p>
     <input type="password" id="pin-input" placeholder="Enter PIN" onkeydown="if(event.key==='Enter')checkPIN()">
-    <div id="pin-err" style="color:var(--red);font-size:12px;margin-bottom:8px;display:none">Incorrect PIN.</div>
+    <div id="pin-err" style="color:var(--red);font-size:12px;margin-bottom:8px;display:none">Incorrect PIN — try again.</div>
     <div class="mo-btns">
-      <button class="btn btn-s" onclick="closePIN()">Cancel</button>
-      <button class="btn btn-p" onclick="checkPIN()">Unlock</button>
+      <button class="btn btn-secondary" onclick="closePIN()">Cancel</button>
+      <button class="btn btn-primary" onclick="checkPIN()">Unlock</button>
     </div>
   </div>
 </div>
 
 <!-- NEW MAINTENANCE RECORD MODAL -->
 <div class="mo" id="maint-mo">
-  <div class="mo-box" style="max-width:680px">
-    <h3>+ Add Maintenance / Service Record</h3>
-    <div id="nm-msg"></div>
-    <div class="frow">
+  <div class="mo-box" style="max-width:700px">
+    <div class="mo-title">+ Add Maintenance / Service Record</div>
+    <div class="msg" id="nm-msg"></div>
+    <div class="form-row">
       <div class="fg"><label>Date</label><input type="date" id="nm-date"></div>
       <div class="fg"><label>Season</label><select id="nm-season"><option>Winter</option><option>Summer</option></select></div>
       <div class="fg"><label>Machine Hours</label><input type="number" id="nm-hours" placeholder="7135" step="0.1"></div>
       <div class="fg"><label>Service Type</label>
         <select id="nm-type"><option>Scheduled / Preventive</option><option>Breakdown / Repair</option><option>Inspection Only</option></select></div>
       <div class="fg"><label>Category</label>
-        <select id="nm-cat"><option>Engine</option><option>Hydraulics</option><option value="Undercarriage / Wheels / Tracks">Undercarriage / Wheels / Tracks</option><option>Electrical</option><option>Cooling System</option><option>Transmission / Drive</option><option value="Snow Blade / Attachments">Snow Blade / Attachments</option><option>Other</option></select></div>
+        <select id="nm-cat">
+          <option>Engine</option><option>Hydraulics</option>
+          <option value="Undercarriage / Wheels / Tracks">Undercarriage / Wheels / Tracks</option>
+          <option>Electrical</option><option>Cooling System</option>
+          <option>Transmission / Drive</option>
+          <option value="Snow Blade / Attachments">Snow Blade / Attachments</option>
+          <option>Winch</option><option>Other</option>
+        </select></div>
       <div class="fg"><label>Labour Type</label>
         <select id="nm-labour"><option>In-house team</option><option>External mechanic</option><option>Mixed</option><option>PistenBully specialist</option></select></div>
       <div class="fg"><label>Performed By</label><input type="text" id="nm-by" placeholder="Name"></div>
@@ -562,18 +1580,18 @@
     </div>
     <div class="fg" style="margin-bottom:10px"><label>Reason for Service</label><textarea id="nm-reason" placeholder="Why was this service needed?" style="min-height:55px"></textarea></div>
     <div class="fg" style="margin-bottom:10px"><label>Work Description</label><textarea id="nm-work" placeholder="Describe work performed in detail…" style="min-height:65px"></textarea></div>
-    <div class="frow">
+    <div class="form-row">
       <div class="fg"><label>Parts Replaced?</label><select id="nm-pyn"><option value="No">No</option><option value="Yes">Yes</option></select></div>
-      <div class="fg"><label>Parts Details</label><input type="text" id="nm-pdetail" placeholder="Part names / numbers"></div>
-      <div class="fg"><label>Parts Source</label><select id="nm-psrc"><option>In-house stock</option><option>Pistenbully Order</option><option>Local vendor</option><option>Other see notes</option></select></div>
+      <div class="fg"><label>Parts Details</label><input type="text" id="nm-pdetail" placeholder="Part names / article numbers"></div>
+      <div class="fg"><label>Parts Source</label><select id="nm-psrc"><option>In-house stock</option><option>Pistenbully Order</option><option>Local vendor</option><option>Other — see notes</option></select></div>
     </div>
-    <div class="frow">
+    <div class="form-row">
       <div class="fg"><label>Follow-up Required?</label><select id="nm-fyn"><option value="No">No</option><option value="Yes">Yes</option></select></div>
       <div class="fg"><label>Follow-up Notes</label><input type="text" id="nm-fnotes" placeholder="If yes, describe…"></div>
     </div>
     <div class="mo-btns">
-      <button class="btn btn-s" onclick="closeMaintMo()">Cancel</button>
-      <button class="btn btn-p" onclick="submitNewMaint()">Save Record</button>
+      <button class="btn btn-secondary" onclick="closeMaintMo()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitNewMaint()">Save Record</button>
     </div>
   </div>
 </div>
@@ -581,21 +1599,21 @@
 <div id="snack"></div>
 
 <script>
-// ─── CONFIG ───────────────────────────────────────────────────────────────
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxQuyK_UEsPfl28KcZBV7H2aDJtpqaP0EE2J5ZFI_5BT0JGR-u0E3qqrqg_vr1544ViGg/exec';
 const PIN = '1234';
 
-// ─── STATE ────────────────────────────────────────────────────────────────
 let allSL = [], allMM = [], allTL = [], cfgUnlocked = false;
 
-// ─── INIT ─────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   const today = new Date().toISOString().split('T')[0];
-  ['op-date','mc-date','nm-date'].forEach(id => { const el = document.getElementById(id); if(el) el.value = today; });
+  ['op-date','mc-date','nm-date'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = today;
+  });
   loadDashboard();
 });
 
-// ─── TAB ──────────────────────────────────────────────────────────────────
+// ── TAB ──────────────────────────────────────────────────────────────────
 function showTab(name) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -608,109 +1626,124 @@ function showTab(name) {
   if (name === 'config' && cfgUnlocked) loadCfgTasks();
 }
 
-// ─── API ──────────────────────────────────────────────────────────────────
-async function api(action, data={}) {
+// ── API ───────────────────────────────────────────────────────────────────
+async function api(action, data = {}) {
   const res = await fetch(SCRIPT_URL, {
-    method:'POST', headers:{'Content-Type':'text/plain'},
-    body: JSON.stringify({action, ...data})
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ action, ...data })
   });
   return res.json();
 }
 
-// ─── DASHBOARD ────────────────────────────────────────────────────────────
+// ── DASHBOARD ─────────────────────────────────────────────────────────────
 async function loadDashboard() {
   try {
     const r = await api('getDashboard');
     if (!r.success) { snack('Dashboard error'); return; }
     const d = r.data;
-    document.getElementById('top-hours').textContent = d.currentHours || '—';
-    document.getElementById('d-hours').textContent = d.currentHours || '—';
+    const hrs = d.currentHours || '—';
+    document.getElementById('top-hours').textContent = hrs;
+    document.getElementById('d-hours').textContent = hrs;
     document.getElementById('d-op').textContent = d.opChecks30d ?? '—';
     document.getElementById('d-mc').textContent = d.mechChecks30d ?? '—';
     document.getElementById('d-fuel').textContent = d.fuel30d ?? '—';
     document.getElementById('d-due').textContent = d.maintDue ?? '—';
     document.getElementById('d-svc').textContent = d.totalService ?? '—';
-
-    // Badge
-    if (d.maintDue > 0) { document.getElementById('due-badge').style.display = ''; document.getElementById('due-badge').textContent = d.maintDue; }
+    if (d.maintDue > 0) {
+      const b = document.getElementById('due-badge');
+      b.style.display = '';
+      b.textContent = d.maintDue;
+    }
 
     // Maint table
     const mt = document.getElementById('d-maint-tbl');
     if (d.maintTasks && d.maintTasks.length) {
       mt.innerHTML = d.maintTasks.map(t => {
-        const pct = Math.max(0, Math.min(100, 100 - (t.remaining / (t.interval||1) * 100)));
-        const col = t.status==='DUE'?'#e74c3c':t.status==='SOON'?'#f39c12':'#2ecc71';
+        const pct = Math.max(0, Math.min(100, 100 - (t.remaining / (t.interval || 1) * 100)));
+        const col = t.status === 'DUE' ? 'var(--red)' : t.status === 'SOON' ? 'var(--amber)' : 'var(--green)';
+        const bc = t.status === 'DUE' ? 'b-red' : t.status === 'SOON' ? 'b-amber' : 'b-green';
         return `<tr>
           <td style="font-weight:600;font-size:13px">${t.name}</td>
-          <td>${t.nextDue} hrs</td>
+          <td style="font-family:var(--mono);font-size:13px">${t.nextDue}</td>
           <td>
-            <div style="display:flex;align-items:center;gap:7px">
-              <div class="prog-wrap"><div class="prog-fill" style="width:${pct}%;background:${col}"></div></div>
-              <span style="font-size:12px;color:${col}">${t.remaining>=0?'+':''}${t.remaining} hrs</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="prog-wrap" style="width:80px"><div class="prog-fill" style="width:${pct}%;background:${col}"></div></div>
+              <span style="font-size:12px;color:${col};font-family:var(--mono)">${t.remaining >= 0 ? '+' : ''}${t.remaining} hrs</span>
             </div>
           </td>
-          <td><span class="badge ${t.status.toLowerCase()}">${t.status}</span></td>
+          <td><span class="badge ${bc}">${t.status}</span></td>
         </tr>`;
       }).join('');
-    } else { mt.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted)">No tasks configured</td></tr>'; }
+    } else {
+      mt.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text3);padding:16px">No tasks configured</td></tr>';
+    }
 
     // Issues
     const iss = document.getElementById('d-issues');
     if (d.recentIssues && d.recentIssues.length) {
       iss.innerHTML = d.recentIssues.map(i => `
-        <div style="padding:7px 0;border-bottom:1px solid rgba(42,48,72,.35);">
-          <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
-            <span style="font-size:12px;font-weight:600">${i.date} &nbsp;·&nbsp; <span style="color:var(--muted)">${i.name||'—'}</span></span>
-            <span class="badge ${i.source==='Operator'?'inspection':'scheduled'}">${i.source}</span>
+        <div style="padding:8px 0;border-bottom:1px solid var(--border)">
+          <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+            <span style="font-size:12px;font-weight:600">${i.date} <span style="color:var(--text3)">· ${i.name || '—'}</span></span>
+            <span class="badge ${i.source === 'Operator' ? 'b-grey' : 'b-blue'}">${i.source}</span>
           </div>
-          <div style="font-size:12px;color:var(--snow)">${i.notes}</div>
+          <div style="font-size:12px;color:var(--text2)">${i.notes}</div>
         </div>`).join('');
-    } else { iss.innerHTML = '<div style="text-align:center;color:var(--muted);padding:18px;font-size:13px">No recent issues</div>'; }
+    } else {
+      iss.innerHTML = '<div style="text-align:center;color:var(--text3);padding:20px;font-size:13px">No recent issues</div>';
+    }
 
     // Recent log
     const rl = document.getElementById('d-recent');
     if (d.recentLog && d.recentLog.length) {
       rl.innerHTML = d.recentLog.map(r => `<tr>
         <td>${r.date}</td>
-        <td><span class="badge ${r.source==='Operator'?'inspection':'scheduled'}">${r.source}</span></td>
-        <td>${r.name||'—'}</td>
-        <td style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700">${r.hours||'—'}</td>
-        <td style="color:var(--muted);font-size:12px">${r.area||'—'}</td>
-        <td>${r.fuel!=null?r.fuel+'L':'—'}</td>
-        <td style="font-size:12px;max-width:220px">${r.notes||'—'}</td>
+        <td><span class="badge ${r.source === 'Operator' ? 'b-grey' : 'b-blue'}">${r.source}</span></td>
+        <td>${r.name || '—'}</td>
+        <td style="font-family:var(--mono);font-size:15px;font-weight:700">${r.hours || '—'}</td>
+        <td style="color:var(--text3);font-size:12px">${r.area || '—'}</td>
+        <td>${r.fuel != null ? r.fuel + 'L' : '—'}</td>
+        <td style="font-size:12px;max-width:220px">${r.notes || '—'}</td>
       </tr>`).join('');
-    } else { rl.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:18px">No recent submissions</td></tr>'; }
-  } catch(e) { snack('Could not connect to backend'); }
+    } else {
+      rl.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:20px">No recent submissions</td></tr>';
+    }
+  } catch (e) {
+    snack('Could not connect to backend');
+  }
 }
 
-// ─── SUBMISSION LOG ───────────────────────────────────────────────────────
+// ── SUBMISSION LOG ────────────────────────────────────────────────────────
 async function loadSubLog() {
-  document.getElementById('sl-body').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">Loading…</td></tr>';
+  document.getElementById('sl-body').innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:24px">Loading…</td></tr>';
   try {
     const r = await api('getMasterLog');
     if (!r.success) return;
     allSL = r.data || [];
     renderSL(allSL);
-  } catch(e) {}
+  } catch (e) {}
 }
+
 function renderSL(data) {
   const tb = document.getElementById('sl-body');
-  if (!data.length) { tb.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">No records</td></tr>'; return; }
+  if (!data.length) { tb.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:24px">No records</td></tr>'; return; }
   tb.innerHTML = data.map(r => `<tr>
-    <td>${r.date||'—'}</td>
-    <td><span class="badge ${r.source==='Operator'?'inspection':'scheduled'}">${r.source||'—'}</span></td>
-    <td>${r.name||'—'}</td>
-    <td style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700">${r.hours||'—'}</td>
-    <td style="font-size:12px;color:var(--muted)">${r.area||'—'}</td>
-    <td>${r.fuel!=null?r.fuel+'L':'—'}</td>
-    <td style="font-size:12px;max-width:230px">${r.notes||'—'}</td>
+    <td>${r.date || '—'}</td>
+    <td><span class="badge ${r.source === 'Operator' ? 'b-grey' : 'b-blue'}">${r.source || '—'}</span></td>
+    <td>${r.name || '—'}</td>
+    <td style="font-family:var(--mono);font-size:15px;font-weight:700">${r.hours || '—'}</td>
+    <td style="font-size:12px;color:var(--text3)">${r.area || '—'}</td>
+    <td>${r.fuel != null ? r.fuel + 'L' : '—'}</td>
+    <td style="font-size:12px;max-width:230px">${r.notes || '—'}</td>
   </tr>`).join('');
 }
+
 function filterSL() {
   const q = document.getElementById('sl-q').value.toLowerCase();
   const type = document.getElementById('sl-type').value;
   const from = document.getElementById('sl-from').value;
-  const to   = document.getElementById('sl-to').value;
+  const to = document.getElementById('sl-to').value;
   renderSL(allSL.filter(r => {
     if (type && r.source !== type) return false;
     if (from && r.date < from) return false;
@@ -719,58 +1752,62 @@ function filterSL() {
     return true;
   }));
 }
+
 function clearSLFilters() {
-  ['sl-q','sl-from','sl-to'].forEach(id => document.getElementById(id).value='');
-  document.getElementById('sl-type').value='';
+  ['sl-q','sl-from','sl-to'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('sl-type').value = '';
   renderSL(allSL);
 }
 
-// ─── MAINTENANCE MASTER ───────────────────────────────────────────────────
+// ── MAINTENANCE MASTER ────────────────────────────────────────────────────
 async function loadMaintMaster() {
-  document.getElementById('mm-body').innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:22px">Loading…</td></tr>';
+  document.getElementById('mm-body').innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--text3);padding:24px">Loading…</td></tr>';
   try {
     const r = await api('getMaintMaster');
     if (!r.success) return;
     allMM = r.data || [];
     renderMM(allMM);
     updateMMStats(allMM);
-  } catch(e) {}
+  } catch (e) {}
 }
+
 function renderMM(data) {
   const tb = document.getElementById('mm-body');
-  if (!data.length) { tb.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:22px">No records</td></tr>'; return; }
-  tb.innerHTML = data.map((r,i) => {
-    const tc = r.type&&r.type.includes('Breakdown')?'breakdown':r.type&&r.type.includes('Scheduled')?'scheduled':'inspection';
-    const sc = r.status&&r.status.includes('observation')?'observation':r.status&&r.status.includes('Not')?'notcleared':'operational';
-    const shortT = r.type?r.type.includes('Breakdown')?'Breakdown':r.type.includes('Scheduled')?'Scheduled':'Inspection':'—';
-    const shortS = r.status?r.status.includes('observation')?'Observation':r.status.includes('Not')?'Not Cleared':'Operational':'—';
+  if (!data.length) { tb.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--text3);padding:24px">No records</td></tr>'; return; }
+  tb.innerHTML = data.map((r, i) => {
+    const tc = r.type && r.type.includes('Breakdown') ? 'b-red' : r.type && r.type.includes('Scheduled') ? 'b-blue' : 'b-grey';
+    const sc = r.status && r.status.includes('observation') ? 'b-amber' : r.status && r.status.includes('Not') ? 'b-red' : 'b-green';
+    const shortT = r.type ? (r.type.includes('Breakdown') ? 'Breakdown' : r.type.includes('Scheduled') ? 'Scheduled' : 'Inspection') : '—';
+    const shortS = r.status ? (r.status.includes('observation') ? 'Observation' : r.status.includes('Not') ? 'Not Cleared' : 'Operational') : '—';
     return `<tr>
-      <td style="color:var(--muted);font-size:11px">${r.id||i+1}</td>
-      <td>${r.date||'—'}</td>
-      <td><span class="badge muted-badge">${r.season||'—'}</span></td>
-      <td style="font-size:12px">${r.category||'—'}</td>
+      <td style="color:var(--text3);font-size:11px;font-family:var(--mono)">${r.id || i + 1}</td>
+      <td>${r.date || '—'}</td>
+      <td><span class="badge b-grey">${r.season || '—'}</span></td>
+      <td style="font-size:12px">${r.category || '—'}</td>
       <td><span class="badge ${tc}">${shortT}</span></td>
-      <td style="font-family:'Barlow Condensed',sans-serif">${r.hours||'—'}</td>
-      <td style="font-size:12px;max-width:220px">${r.work||r.reason||'—'}</td>
-      <td style="font-size:12px">${r.parts_yn==='Yes'?'✓ '+(r.parts_detail||''):'—'}</td>
-      <td>${r.by||'—'}</td>
-      <td>${r.downtime!=null?r.downtime+'h':'—'}</td>
+      <td style="font-family:var(--mono)">${r.hours || '—'}</td>
+      <td style="font-size:12px;max-width:220px">${r.work || r.reason || '—'}</td>
+      <td style="font-size:12px">${r.parts_yn === 'Yes' ? '✓ ' + (r.parts_detail || '') : '—'}</td>
+      <td>${r.by || '—'}</td>
+      <td>${r.downtime != null ? r.downtime + 'h' : '—'}</td>
       <td><span class="badge ${sc}">${shortS}</span></td>
     </tr>`;
   }).join('');
 }
+
 function updateMMStats(data) {
   document.getElementById('mm-total').textContent = data.length;
-  document.getElementById('mm-bd').textContent = data.filter(r=>r.type&&r.type.includes('Breakdown')).length;
-  document.getElementById('mm-sc').textContent = data.filter(r=>r.type&&r.type.includes('Scheduled')).length;
-  document.getElementById('mm-fu').textContent = data.filter(r=>r.followup==='Yes').length;
-  document.getElementById('mm-dt').textContent = data.reduce((a,r)=>a+(parseFloat(r.downtime)||0),0);
+  document.getElementById('mm-bd').textContent = data.filter(r => r.type && r.type.includes('Breakdown')).length;
+  document.getElementById('mm-sc').textContent = data.filter(r => r.type && r.type.includes('Scheduled')).length;
+  document.getElementById('mm-fu').textContent = data.filter(r => r.followup === 'Yes').length;
+  document.getElementById('mm-dt').textContent = data.reduce((a, r) => a + (parseFloat(r.downtime) || 0), 0);
 }
+
 function filterMM() {
   const q = document.getElementById('mm-q').value.toLowerCase();
   const season = document.getElementById('mm-season').value;
-  const type   = document.getElementById('mm-type').value;
-  const cat    = document.getElementById('mm-cat').value;
+  const type = document.getElementById('mm-type').value;
+  const cat = document.getElementById('mm-cat').value;
   const status = document.getElementById('mm-status').value;
   const f = allMM.filter(r => {
     if (season && r.season !== season) return false;
@@ -782,27 +1819,29 @@ function filterMM() {
   });
   renderMM(f); updateMMStats(f);
 }
+
 function clearMMFilters() {
-  ['mm-q'].forEach(id=>document.getElementById(id).value='');
-  ['mm-season','mm-type','mm-cat','mm-status'].forEach(id=>document.getElementById(id).value='');
+  ['mm-q'].forEach(id => document.getElementById(id).value = '');
+  ['mm-season','mm-type','mm-cat','mm-status'].forEach(id => document.getElementById(id).value = '');
   renderMM(allMM); updateMMStats(allMM);
 }
 
-// ─── TIMELINE ─────────────────────────────────────────────────────────────
+// ── TIMELINE ──────────────────────────────────────────────────────────────
 async function loadTimeline() {
-  document.getElementById('tl-wrap').innerHTML = '<div style="text-align:center;color:var(--muted);padding:40px">Loading…</div>';
+  document.getElementById('tl-wrap').innerHTML = '<div style="text-align:center;color:var(--text3);padding:40px">Loading…</div>';
   try {
     const r = await api('getMaintMaster');
     if (!r.success) return;
-    allTL = (r.data||[]).sort((a,b)=>new Date(b.date)-new Date(a.date));
+    allTL = (r.data || []).sort((a, b) => new Date(b.date) - new Date(a.date));
     renderTL(allTL);
-  } catch(e) {}
+  } catch (e) {}
 }
+
 function renderTL(data) {
   const season = document.getElementById('tl-season').value;
-  const type   = document.getElementById('tl-type').value;
-  const from   = document.getElementById('tl-from').value;
-  const to     = document.getElementById('tl-to').value;
+  const type = document.getElementById('tl-type').value;
+  const from = document.getElementById('tl-from').value;
+  const to = document.getElementById('tl-to').value;
   const f = data.filter(r => {
     if (season && r.season !== season) return false;
     if (type && r.type !== type) return false;
@@ -811,65 +1850,60 @@ function renderTL(data) {
     return true;
   });
   const el = document.getElementById('tl-wrap');
-  if (!f.length) { el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:40px">No records match filter</div>'; return; }
+  if (!f.length) { el.innerHTML = '<div style="text-align:center;color:var(--text3);padding:40px">No records match filter</div>'; return; }
   el.innerHTML = f.map(r => {
-    const isB = r.type&&r.type.includes('Breakdown');
-    const isS = r.type&&r.type.includes('Scheduled');
-    const dc = isB?'breakdown':isS?'scheduled':'inspection';
-    const em = isB?'🔴':isS?'🔵':'⚪';
+    const isB = r.type && r.type.includes('Breakdown');
+    const isS = r.type && r.type.includes('Scheduled');
+    const dc = isB ? 'bd' : isS ? 'sc' : 'in';
+    const em = isB ? '🔴' : isS ? '🔵' : '⚪';
     return `<div class="tl-item">
       <div class="tl-dot ${dc}">${em}</div>
       <div class="tl-body">
-        <div class="tl-title">${r.category||'General'} — ${r.type?r.type.includes('Breakdown')?'Breakdown':r.type.includes('Scheduled')?'Scheduled':'Inspection':'—'}</div>
+        <div class="tl-title">${r.category || 'General'} — ${isB ? 'Breakdown' : isS ? 'Scheduled' : 'Inspection'}</div>
         <div class="tl-meta">
-          <span>📅 ${r.date||'—'}</span>
-          <span>⏱ ${r.hours||'—'} hrs</span>
-          <span>🏔 ${r.season||'—'}</span>
-          ${r.by?`<span>👤 ${r.by}</span>`:''}
-          ${r.downtime?`<span>⏳ ${r.downtime}h downtime</span>`:''}
+          <span>📅 ${r.date || '—'}</span>
+          <span>⏱ ${r.hours || '—'} hrs</span>
+          <span>🏔 ${r.season || '—'}</span>
+          ${r.by ? `<span>👤 ${r.by}</span>` : ''}
+          ${r.downtime ? `<span>⏳ ${r.downtime}h downtime</span>` : ''}
         </div>
-        ${r.work||r.reason?`<div class="tl-notes">${r.work||r.reason}</div>`:''}
-        ${r.parts_yn==='Yes'&&r.parts_detail?`<div style="font-size:11px;color:var(--amber);margin-top:3px">🔩 Parts: ${r.parts_detail}</div>`:''}
+        ${r.work || r.reason ? `<div class="tl-notes">${r.work || r.reason}</div>` : ''}
+        ${r.parts_yn === 'Yes' && r.parts_detail ? `<div style="font-size:11px;color:var(--accent);margin-top:4px">🔩 Parts: ${r.parts_detail}</div>` : ''}
       </div>
     </div>`;
   }).join('');
 }
+
 function filterTL() { renderTL(allTL); }
 
-// ─── SUBMIT OPERATOR ──────────────────────────────────────────────────────
+// ── FORM TYPE TOGGLE ──────────────────────────────────────────────────────
 function setType(t) {
-  document.getElementById('form-op').style.display = t==='op'?'':'none';
-  document.getElementById('form-mc').style.display = t==='mc'?'':'none';
-  document.getElementById('btn-op').className = t==='op'?'btn btn-p':'btn btn-s';
-  document.getElementById('btn-mc').className = t==='mc'?'btn btn-p':'btn btn-s';
+  document.getElementById('form-op').style.display = t === 'op' ? '' : 'none';
+  document.getElementById('form-mc').style.display = t === 'mc' ? '' : 'none';
+  document.getElementById('btn-op').className = t === 'op' ? 'btn btn-primary' : 'btn btn-secondary';
+  document.getElementById('btn-mc').className = t === 'mc' ? 'btn btn-primary' : 'btn btn-secondary';
 }
 
-// Collect all checkbox values within a container as {id → bool}
 function collectChecks(containerId, prefix) {
   const obj = {};
   document.querySelectorAll(`#${containerId} input[type=checkbox]`).forEach(cb => {
-    const key = cb.id.replace(prefix+'-','');
-    obj[key] = cb.checked;
+    obj[cb.id.replace(prefix + '-', '')] = cb.checked;
   });
   return obj;
 }
 
-function selectAll(containerId) {
-  document.querySelectorAll(`#${containerId} input[type=checkbox]`).forEach(cb => cb.checked = true);
-}
-function clearAll(containerId) {
-  document.querySelectorAll(`#${containerId} input[type=checkbox]`).forEach(cb => cb.checked = false);
-}
+function selectAll(id) { document.querySelectorAll(`#${id} input[type=checkbox]`).forEach(c => c.checked = true); }
+function clearAll(id) { document.querySelectorAll(`#${id} input[type=checkbox]`).forEach(c => c.checked = false); }
 
+// ── SUBMIT OPERATOR ───────────────────────────────────────────────────────
 async function submitOp() {
   const msgEl = document.getElementById('op-msg');
-  msgEl.className='msg'; msgEl.textContent='';
-  const date  = document.getElementById('op-date').value;
-  const name  = document.getElementById('op-name').value.trim();
+  msgEl.className = 'msg'; msgEl.textContent = '';
+  const date = document.getElementById('op-date').value;
+  const name = document.getElementById('op-name').value.trim();
   const hours = document.getElementById('op-hours').value;
-  if (!date||!name||!hours) { msgEl.textContent='Date, Name and Hour Meter are required.'; msgEl.className='msg error'; return; }
-  // Collect all individual checkbox keys from form-op
-  const checks = collectChecks('form-op','op');
+  if (!date || !name || !hours) { msgEl.textContent = 'Date, Name and Hour Meter are required.'; msgEl.className = 'msg error show'; return; }
+  const checks = collectChecks('form-op', 'op');
   const payload = {
     date, name,
     shift: document.getElementById('op-shift').value,
@@ -880,19 +1914,19 @@ async function submitOp() {
   };
   try {
     const r = await api('submitOperatorCheck', payload);
-    if (r.success) { msgEl.textContent='✓ Operator check submitted.'; msgEl.className='msg success'; snack('✓ Operator check submitted!'); clearOpForm(); }
-    else { msgEl.textContent='Error: '+(r.error||'Unknown'); msgEl.className='msg error'; }
-  } catch(e) { msgEl.textContent='Connection error.'; msgEl.className='msg error'; }
+    if (r.success) { msgEl.textContent = '✓ Operator check submitted successfully.'; msgEl.className = 'msg success show'; snack('✓ Operator check submitted!'); clearOpForm(); }
+    else { msgEl.textContent = 'Error: ' + (r.error || 'Unknown'); msgEl.className = 'msg error show'; }
+  } catch (e) { msgEl.textContent = 'Connection error. Please try again.'; msgEl.className = 'msg error show'; }
 }
 
 async function submitMC() {
   const msgEl = document.getElementById('mc-msg');
-  msgEl.className='msg'; msgEl.textContent='';
-  const date  = document.getElementById('mc-date').value;
-  const name  = document.getElementById('mc-name').value.trim();
+  msgEl.className = 'msg'; msgEl.textContent = '';
+  const date = document.getElementById('mc-date').value;
+  const name = document.getElementById('mc-name').value.trim();
   const hours = document.getElementById('mc-hours').value;
-  if (!date||!name||!hours) { msgEl.textContent='Date, Name and Hour Meter are required.'; msgEl.className='msg error'; return; }
-  const checks = collectChecks('form-mc','mc');
+  if (!date || !name || !hours) { msgEl.textContent = 'Date, Name and Hour Meter are required.'; msgEl.className = 'msg error show'; return; }
+  const checks = collectChecks('form-mc', 'mc');
   const payload = {
     date, name, hours,
     diesel: document.getElementById('mc-diesel').value,
@@ -904,29 +1938,32 @@ async function submitMC() {
   };
   try {
     const r = await api('submitMechCheck', payload);
-    if (r.success) { msgEl.textContent='✓ Mechanical check submitted.'; msgEl.className='msg success'; snack('✓ Mechanical check submitted!'); clearMCForm(); }
-    else { msgEl.textContent='Error: '+(r.error||'Unknown'); msgEl.className='msg error'; }
-  } catch(e) { msgEl.textContent='Connection error.'; msgEl.className='msg error'; }
+    if (r.success) { msgEl.textContent = '✓ Mechanical check submitted successfully.'; msgEl.className = 'msg success show'; snack('✓ Mechanical check submitted!'); clearMCForm(); }
+    else { msgEl.textContent = 'Error: ' + (r.error || 'Unknown'); msgEl.className = 'msg error show'; }
+  } catch (e) { msgEl.textContent = 'Connection error. Please try again.'; msgEl.className = 'msg error show'; }
 }
 
 function clearOpForm() {
-  ['op-name','op-area','op-notes'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('op-fuel').value='0';
+  ['op-name','op-area','op-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('op-fuel').value = '0';
   clearAll('form-op');
 }
+
 function clearMCForm() {
-  ['mc-name','mc-hours','mc-diesel','mc-notes'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('mc-diesel').value='0';
+  ['mc-name','mc-hours','mc-diesel','mc-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('mc-diesel').value = '0';
   clearAll('form-mc');
 }
 
-// ─── NEW MAINT RECORD ────────────────────────────────────────────────────
+// ── NEW MAINT RECORD ──────────────────────────────────────────────────────
 function openNewMaint() {
   document.getElementById('nm-date').value = new Date().toISOString().split('T')[0];
-  document.getElementById('nm-msg').textContent='';
+  document.getElementById('nm-msg').textContent = '';
   document.getElementById('maint-mo').classList.add('open');
 }
+
 function closeMaintMo() { document.getElementById('maint-mo').classList.remove('open'); }
+
 async function submitNewMaint() {
   const msgEl = document.getElementById('nm-msg');
   const data = {
@@ -948,54 +1985,71 @@ async function submitNewMaint() {
     followup: document.getElementById('nm-fyn').value,
     followup_notes: document.getElementById('nm-fnotes').value,
   };
-  if (!data.date||!data.work) { msgEl.textContent='Date and Work Description required.'; msgEl.className='msg error'; return; }
+  if (!data.date || !data.work) { msgEl.textContent = 'Date and Work Description required.'; msgEl.className = 'msg error show'; return; }
   try {
     const r = await api('addMaintRecord', data);
-    if (r.success) { closeMaintMo(); snack('✓ Maintenance record saved ('+r.id+')'); loadMaintMaster(); }
-    else { msgEl.textContent='Error: '+(r.error||'Unknown'); msgEl.className='msg error'; }
-  } catch(e) { msgEl.textContent='Connection error.'; msgEl.className='msg error'; }
+    if (r.success) { closeMaintMo(); snack('✓ Maintenance record saved (' + r.id + ')'); loadMaintMaster(); }
+    else { msgEl.textContent = 'Error: ' + (r.error || 'Unknown'); msgEl.className = 'msg error show'; }
+  } catch (e) { msgEl.textContent = 'Connection error.'; msgEl.className = 'msg error show'; }
 }
 
-// ─── CONFIG ───────────────────────────────────────────────────────────────
-function openPIN() { document.getElementById('pin-mo').classList.add('open'); document.getElementById('pin-input').value=''; document.getElementById('pin-err').style.display='none'; setTimeout(()=>document.getElementById('pin-input').focus(),200); }
+// ── CONFIG ────────────────────────────────────────────────────────────────
+function openPIN() {
+  document.getElementById('pin-mo').classList.add('open');
+  document.getElementById('pin-input').value = '';
+  document.getElementById('pin-err').style.display = 'none';
+  setTimeout(() => document.getElementById('pin-input').focus(), 200);
+}
+
 function closePIN() { document.getElementById('pin-mo').classList.remove('open'); }
+
 function checkPIN() {
   if (document.getElementById('pin-input').value === PIN) {
-    closePIN(); cfgUnlocked=true;
-    document.getElementById('cfg-locked').style.display='none';
-    document.getElementById('cfg-unlocked').style.display='';
+    closePIN();
+    cfgUnlocked = true;
+    document.getElementById('cfg-locked').style.display = 'none';
+    document.getElementById('cfg-unlocked').style.display = '';
     loadCfgTasks();
-  } else { document.getElementById('pin-err').style.display=''; }
+  } else {
+    document.getElementById('pin-err').style.display = '';
+  }
 }
-function lockCfg() { cfgUnlocked=false; document.getElementById('cfg-locked').style.display=''; document.getElementById('cfg-unlocked').style.display='none'; }
+
+function lockCfg() {
+  cfgUnlocked = false;
+  document.getElementById('cfg-locked').style.display = '';
+  document.getElementById('cfg-unlocked').style.display = 'none';
+}
 
 async function loadCfgTasks() {
-  const tb = document.getElementById('cfg-body');
   try {
     const r = await api('getConfigTasks');
     if (!r.success) return;
-    const tasks = r.data||[];
-    if (!tasks.length) { tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:var(--muted)">No tasks configured</td></tr>'; return; }
-    tb.innerHTML = tasks.map((t,i)=>{
-      const col = t.status==='DUE'?'var(--red)':t.status==='SOON'?'var(--amber)':'var(--green)';
+    const tasks = r.data || [];
+    const tb = document.getElementById('cfg-body');
+    if (!tasks.length) { tb.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--text3);padding:20px">No tasks configured</td></tr>'; return; }
+    tb.innerHTML = tasks.map((t, i) => {
+      const col = t.status === 'DUE' ? 'var(--red)' : t.status === 'SOON' ? 'var(--amber)' : 'var(--green2)';
+      const bc = t.status === 'DUE' ? 'b-red' : t.status === 'SOON' ? 'b-amber' : 'b-green';
       return `<tr>
-        <td><span style="color:${t.active?'var(--green)':'var(--muted)'}">${t.active?'●':'○'}</span></td>
+        <td><span style="color:${t.active ? 'var(--green2)' : 'var(--text3)'};font-size:16px">${t.active ? '●' : '○'}</span></td>
         <td style="font-weight:600">${t.name}</td>
-        <td>${t.interval} hrs</td>
-        <td>${t.lastDone} hrs</td>
-        <td style="color:var(--accent);font-weight:700">${t.nextDue} hrs</td>
+        <td style="font-family:var(--mono)">${t.interval} hrs</td>
+        <td style="font-family:var(--mono)">${t.lastDone} hrs</td>
+        <td style="font-family:var(--mono);color:var(--accent);font-weight:700">${t.nextDue} hrs</td>
         <td>${t.notifyBefore} hrs</td>
-        <td>${t.assignedTo||'—'}</td>
-        <td style="color:${col};font-weight:600">${t.remaining>=0?'+':''}${t.remaining} hrs</td>
-        <td><span class="badge ${t.status.toLowerCase()}">${t.status}</span></td>
-        <td><button class="btn btn-d btn-sm" onclick="delTask(${t.rowIndex})">✕</button></td>
+        <td>${t.assignedTo || '—'}</td>
+        <td style="color:${col};font-weight:600;font-family:var(--mono)">${t.remaining >= 0 ? '+' : ''}${t.remaining} hrs</td>
+        <td><span class="badge ${bc}">${t.status}</span></td>
+        <td><button class="btn btn-secondary btn-sm" style="color:var(--red);border-color:rgba(229,62,62,0.3)" onclick="delTask(${t.rowIndex})">✕</button></td>
       </tr>`;
     }).join('');
-  } catch(e) {}
+  } catch (e) {}
 }
 
-function showAddTask() { document.getElementById('add-task-form').style.display=''; }
-function hideAddTask() { document.getElementById('add-task-form').style.display='none'; }
+function showAddTask() { document.getElementById('add-task-form').style.display = ''; }
+function hideAddTask() { document.getElementById('add-task-form').style.display = 'none'; }
+
 async function addConfigTask() {
   const data = {
     name: document.getElementById('cfg-name').value,
@@ -1005,19 +2059,24 @@ async function addConfigTask() {
     assignedTo: document.getElementById('cfg-assigned').value,
     notes: document.getElementById('cfg-notes').value
   };
-  if (!data.name||!data.interval) { snack('Task name and interval required'); return; }
-  try { const r = await api('addConfigTask', data); if(r.success){snack('✓ Task added'); hideAddTask(); loadCfgTasks();} } catch(e){}
-}
-async function delTask(rowIndex) {
-  if (!confirm('Remove this maintenance task?')) return;
-  try { await api('deleteConfigTask', {rowIndex}); loadCfgTasks(); snack('Task removed'); } catch(e){}
+  if (!data.name || !data.interval) { snack('Task name and interval required'); return; }
+  try {
+    const r = await api('addConfigTask', data);
+    if (r.success) { snack('✓ Task added'); hideAddTask(); loadCfgTasks(); }
+  } catch (e) {}
 }
 
-// ─── SNACK ────────────────────────────────────────────────────────────────
+async function delTask(rowIndex) {
+  if (!confirm('Remove this maintenance task?')) return;
+  try { await api('deleteConfigTask', { rowIndex }); loadCfgTasks(); snack('Task removed'); } catch (e) {}
+}
+
+// ── SNACK ─────────────────────────────────────────────────────────────────
 function snack(msg) {
-  const el=document.getElementById('snack');
-  el.textContent=msg; el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),3000);
+  const el = document.getElementById('snack');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3200);
 }
 </script>
 </body>
