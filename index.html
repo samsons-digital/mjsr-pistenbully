@@ -827,6 +827,7 @@ tr:hover td { background: rgba(13,30,58,0.025); }
   <button class="nav-tab" onclick="showTab('sublog')" data-tab="sublog">📁 Submission Log</button>
   <button class="nav-tab" onclick="showTab('maintenance')" data-tab="maintenance">🔧 Maintenance Master</button>
   <button class="nav-tab" onclick="showTab('timeline')" data-tab="timeline">📖 Maintenance Log</button>
+  <button class="nav-tab" onclick="showTab('maintsubmit')" data-tab="maintsubmit">🛠️ Log Service Work</button>
   <button class="nav-tab" onclick="showTab('schedule')" data-tab="schedule">📐 Service Schedule</button>
   <button class="nav-tab" onclick="showTab('winch')" data-tab="winch">⚡ Winch Status</button>
   <button class="nav-tab" onclick="showTab('config')" data-tab="config">⚙️ Config <span class="badge" id="due-badge" style="display:none">!</span></button>
@@ -1292,6 +1293,270 @@ tr:hover td { background: rgba(13,30,58,0.025); }
 </div>
 
 <!-- ═══ SERVICE SCHEDULE ══════════════════════════════════════════════════ -->
+
+<!-- ═══ MAINTENANCE SUBMIT ════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-maintsubmit">
+  <div class="sec-hdr">
+    <h2>Log <span>Service Work</span></h2>
+    <span style="font-size:12px;color:var(--text3);font-family:var(--mono)">Records saved to Service Master sheet</span>
+  </div>
+
+  <!-- SUCCESS STATE -->
+  <div id="ms-success" style="display:none">
+    <div style="background:#ffffff;border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 4px rgba(13,30,58,0.06);padding:48px 24px;text-align:center;max-width:560px;margin:0 auto">
+      <div style="width:64px;height:64px;background:rgba(26,138,80,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px">✓</div>
+      <h3 style="font-family:var(--cond);font-size:22px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--navy);margin-bottom:8px">Record Saved</h3>
+      <p style="font-size:14px;color:var(--text2);margin-bottom:6px">Service record submitted to the Master Log.</p>
+      <p id="ms-success-id" style="font-family:var(--mono);font-size:13px;color:var(--green);font-weight:600;margin-bottom:24px"></p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="resetMaintSubmit()">+ Log Another Record</button>
+        <button class="btn btn-secondary" onclick="showTab('maintenance')">View Maintenance Master</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM STATE -->
+  <div id="ms-form">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:1100px">
+
+      <!-- LEFT COLUMN: Job Details -->
+      <div>
+        <div class="form-card">
+          <div class="form-title" style="display:flex;align-items:center;gap:10px">
+            <div style="width:28px;height:28px;background:rgba(13,30,58,0.08);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px">📋</div>
+            Job Details
+          </div>
+          <div class="msg" id="ms-msg"></div>
+
+          <div class="form-row" style="grid-template-columns:1fr 1fr">
+            <div class="fg">
+              <label>Date of Service</label>
+              <input type="date" id="ms-date">
+            </div>
+            <div class="fg">
+              <label>Season</label>
+              <select id="ms-season">
+                <option>Winter</option>
+                <option>Summer</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row" style="grid-template-columns:1fr 1fr">
+            <div class="fg">
+              <label>Hour Meter at Time of Service</label>
+              <input type="number" id="ms-hours" placeholder="e.g. 7135" step="0.1">
+            </div>
+            <div class="fg">
+              <label>Downtime (Hours)</label>
+              <input type="number" id="ms-downtime" placeholder="0" step="0.5" value="0">
+            </div>
+          </div>
+
+          <div class="form-row" style="grid-template-columns:1fr 1fr">
+            <div class="fg">
+              <label>Service Type</label>
+              <select id="ms-type" onchange="updateMSTypeHint()">
+                <option>Scheduled / Preventive</option>
+                <option>Breakdown / Repair</option>
+                <option>Inspection Only</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Category</label>
+              <select id="ms-cat" onchange="updateMSCategoryIcon()">
+                <option>Engine</option>
+                <option>Hydraulics</option>
+                <option value="Undercarriage / Wheels / Tracks">Undercarriage / Wheels / Tracks</option>
+                <option>Electrical</option>
+                <option>Cooling System</option>
+                <option>Transmission / Drive</option>
+                <option value="Snow Blade / Attachments">Snow Blade / Attachments</option>
+                <option>Winch</option>
+                <option>Tiller</option>
+                <option>Cab / Controls</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Type hint banner -->
+          <div id="ms-type-hint" style="background:#f4f6f9;border:1px solid var(--border);border-left:3px solid var(--navy);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--text2);display:flex;align-items:center;gap:8px">
+            <span style="font-size:14px">📅</span>
+            <span id="ms-type-hint-text">Scheduled / Preventive — log the service interval completed and any findings.</span>
+          </div>
+
+          <div class="fg" style="margin-bottom:12px">
+            <label>Reason for Service <span style="color:var(--pb-red)">*</span></label>
+            <textarea id="ms-reason" placeholder="Why was this service carried out? e.g. Reached 500 hr engine oil interval, or Breakdown — hydraulic hose failure on main slope…" style="min-height:72px"></textarea>
+          </div>
+
+          <div class="fg" style="margin-bottom:0">
+            <label>Work Description <span style="color:var(--pb-red)">*</span></label>
+            <textarea id="ms-work" placeholder="Describe exactly what was done in detail. Include any findings, measurements, torque values applied, tests performed…" style="min-height:100px"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Parts + Labour + Status -->
+      <div style="display:flex;flex-direction:column;gap:14px">
+
+        <!-- Labour & Personnel -->
+        <div class="form-card">
+          <div class="form-title" style="font-size:13px;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+            <div style="width:24px;height:24px;background:rgba(13,30,58,0.08);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px">👤</div>
+            Labour &amp; Personnel
+          </div>
+          <div class="form-row" style="grid-template-columns:1fr 1fr;margin-bottom:0">
+            <div class="fg">
+              <label>Labour Type</label>
+              <select id="ms-labour">
+                <option>In-house team</option>
+                <option>External mechanic</option>
+                <option>Mixed</option>
+                <option>PistenBully specialist</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Performed By</label>
+              <input type="text" id="ms-by" placeholder="e.g. Asif, Asmat">
+            </div>
+          </div>
+          <div class="fg" style="margin-top:10px">
+            <label>Verified By</label>
+            <input type="text" id="ms-verified" placeholder="GM / Senior Manager name">
+          </div>
+        </div>
+
+        <!-- Parts -->
+        <div class="form-card">
+          <div class="form-title" style="font-size:13px;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+            <div style="width:24px;height:24px;background:rgba(13,30,58,0.08);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px">🔩</div>
+            Parts &amp; Materials
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <span style="font-size:13px;color:var(--text2)">Were parts replaced or consumed?</span>
+            <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden">
+              <button id="ms-pyn-no" onclick="setPartsToggle(false)"
+                style="padding:7px 18px;font-family:var(--cond);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;background:var(--navy);color:#fff;transition:all 0.15s">
+                No
+              </button>
+              <button id="ms-pyn-yes" onclick="setPartsToggle(true)"
+                style="padding:7px 18px;font-family:var(--cond);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;background:#f4f6f9;color:var(--text3);transition:all 0.15s">
+                Yes
+              </button>
+            </div>
+          </div>
+
+          <div id="ms-parts-detail" style="display:none">
+            <div class="fg" style="margin-bottom:10px">
+              <label>Parts / Materials Description <span style="font-size:10px;color:var(--text3)">(include article numbers if known)</span></label>
+              <textarea id="ms-pdetail" placeholder="e.g. Engine oil filter — Cummins spec&#10;Engine oil SAE 10W40 — 26.5L&#10;Art. 8.026.034.018.0 Magnetic Valve" style="min-height:70px"></textarea>
+            </div>
+            <div class="fg">
+              <label>Parts Source</label>
+              <select id="ms-psrc">
+                <option>In-house stock</option>
+                <option>PistenBully Order</option>
+                <option>Local vendor</option>
+                <option>Islamabad / workshop</option>
+                <option>Mingora repair</option>
+                <option>Other — see notes</option>
+              </select>
+            </div>
+          </div>
+
+          <input type="hidden" id="ms-pyn" value="No">
+        </div>
+
+        <!-- Machine Status -->
+        <div class="form-card">
+          <div class="form-title" style="font-size:13px;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+            <div style="width:24px;height:24px;background:rgba(13,30,58,0.08);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px">🚦</div>
+            Machine Status After Service
+          </div>
+
+          <div id="ms-status-group" style="display:flex;flex-direction:column;gap:6px">
+            <label class="ms-status-opt" data-val="Fully Operational" style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.15s;background:#fff">
+              <input type="radio" name="ms-status-r" value="Fully Operational" checked style="accent-color:var(--green)">
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--navy)">Fully Operational</div>
+                <div style="font-size:11px;color:var(--text3)">All systems working normally — cleared for operation</div>
+              </div>
+              <span class="badge b-green" style="margin-left:auto">✓ Clear</span>
+            </label>
+            <label class="ms-status-opt" data-val="Operational with observation" style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.15s;background:#fff">
+              <input type="radio" name="ms-status-r" value="Operational with observation" style="accent-color:var(--amber)">
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--navy)">Operational with Observation</div>
+                <div style="font-size:11px;color:var(--text3)">Can operate but monitor — issue noted, not yet resolved</div>
+              </div>
+              <span class="badge b-amber" style="margin-left:auto">⚠ Monitor</span>
+            </label>
+            <label class="ms-status-opt" data-val="Not cleared for use" style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.15s;background:#fff">
+              <input type="radio" name="ms-status-r" value="Not cleared for use" style="accent-color:var(--pb-red)">
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--navy)">Not Cleared for Use</div>
+                <div style="font-size:11px;color:var(--text3)">Machine should not operate — fault not resolved</div>
+              </div>
+              <span class="badge b-red" style="margin-left:auto">✗ Grounded</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Follow-up -->
+        <div class="form-card">
+          <div class="form-title" style="font-size:13px;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+            <div style="width:24px;height:24px;background:rgba(13,30,58,0.08);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px">📌</div>
+            Follow-Up Required?
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <span style="font-size:13px;color:var(--text2)">Does this service require follow-up action?</span>
+            <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden">
+              <button id="ms-fyn-no" onclick="setFollowupToggle(false)"
+                style="padding:7px 18px;font-family:var(--cond);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;background:var(--navy);color:#fff;transition:all 0.15s">
+                No
+              </button>
+              <button id="ms-fyn-yes" onclick="setFollowupToggle(true)"
+                style="padding:7px 18px;font-family:var(--cond);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;background:#f4f6f9;color:var(--text3);transition:all 0.15s">
+                Yes
+              </button>
+            </div>
+          </div>
+
+          <div id="ms-followup-detail" style="display:none">
+            <div class="fg">
+              <label>Follow-Up Notes</label>
+              <textarea id="ms-fnotes" placeholder="Describe what still needs to be done, what parts are on order, or what needs to be monitored…" style="min-height:70px"></textarea>
+            </div>
+          </div>
+
+          <input type="hidden" id="ms-fyn" value="No">
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SUBMIT BAR -->
+    <div style="background:#ffffff;border:1px solid var(--border);border-radius:10px;box-shadow:0 1px 4px rgba(13,30,58,0.06);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;margin-top:4px;flex-wrap:wrap;gap:12px;max-width:1100px">
+      <div>
+        <div style="font-family:var(--cond);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--navy)">Ready to Submit?</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px">Reason for Service and Work Description are required. Record will be saved to the Service Master log.</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="btn btn-secondary" onclick="clearMaintSubmit()">Clear Form</button>
+        <button class="btn btn-primary" id="ms-submit-btn" onclick="submitMaintRecord()" style="min-width:160px">
+          ✓ Save Service Record
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- ═══ END MAINTENANCE SUBMIT ════════════════════════════════════════════ -->
+
 <div class="tab-content" id="tab-schedule">
   <div class="sec-hdr"><h2>PistenBully 400 <span>Service Schedule</span></h2>
     <span style="font-size:11px;color:var(--text3);font-family:var(--mono)">Source: Customer's Workshop Information (CWI) + Drum Winch OM</span>
@@ -1606,7 +1871,7 @@ let allSL = [], allMM = [], allTL = [], cfgUnlocked = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   const today = new Date().toISOString().split('T')[0];
-  ['op-date','mc-date','nm-date'].forEach(id => {
+  ['op-date','mc-date','nm-date','ms-date'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = today;
   });
@@ -2078,6 +2343,179 @@ function snack(msg) {
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 3200);
 }
+
+// ── MAINTENANCE SUBMIT TAB ────────────────────────────────────────────────
+
+let msPartsActive = false;
+let msFollowupActive = false;
+
+function updateMSTypeHint() {
+  const type = document.getElementById('ms-type').value;
+  const hints = {
+    'Scheduled / Preventive': '📅  Scheduled / Preventive — log the service interval completed, fluid volumes added, and any findings.',
+    'Breakdown / Repair': '🔴  Breakdown / Repair — describe the fault, what caused it, and exactly what was done to resolve it.',
+    'Inspection Only': '🔍  Inspection Only — record what was inspected, the condition found, and any recommendations.'
+  };
+  const colours = {
+    'Scheduled / Preventive': 'var(--navy)',
+    'Breakdown / Repair': 'var(--pb-red)',
+    'Inspection Only': 'var(--blue)'
+  };
+  const borders = {
+    'Scheduled / Preventive': 'var(--navy)',
+    'Breakdown / Repair': 'var(--pb-red)',
+    'Inspection Only': 'var(--blue)'
+  };
+  const hint = document.getElementById('ms-type-hint');
+  const hintText = document.getElementById('ms-type-hint-text');
+  if (hint && hintText) {
+    hint.style.borderLeftColor = borders[type] || 'var(--navy)';
+    hintText.textContent = hints[type] || '';
+    hintText.style.color = colours[type] || 'var(--text2)';
+  }
+}
+
+function updateMSCategoryIcon() {
+  // Future hook — category-specific tips could go here
+}
+
+function setPartsToggle(active) {
+  msPartsActive = active;
+  document.getElementById('ms-pyn').value = active ? 'Yes' : 'No';
+  document.getElementById('ms-parts-detail').style.display = active ? 'block' : 'none';
+  const noBtn = document.getElementById('ms-pyn-no');
+  const yesBtn = document.getElementById('ms-pyn-yes');
+  if (active) {
+    yesBtn.style.background = 'var(--navy)'; yesBtn.style.color = '#fff';
+    noBtn.style.background = '#f4f6f9'; noBtn.style.color = 'var(--text3)';
+  } else {
+    noBtn.style.background = 'var(--navy)'; noBtn.style.color = '#fff';
+    yesBtn.style.background = '#f4f6f9'; yesBtn.style.color = 'var(--text3)';
+  }
+}
+
+function setFollowupToggle(active) {
+  msFollowupActive = active;
+  document.getElementById('ms-fyn').value = active ? 'Yes' : 'No';
+  document.getElementById('ms-followup-detail').style.display = active ? 'block' : 'none';
+  const noBtn = document.getElementById('ms-fyn-no');
+  const yesBtn = document.getElementById('ms-fyn-yes');
+  if (active) {
+    yesBtn.style.background = 'var(--navy)'; yesBtn.style.color = '#fff';
+    noBtn.style.background = '#f4f6f9'; noBtn.style.color = 'var(--text3)';
+  } else {
+    noBtn.style.background = 'var(--navy)'; noBtn.style.color = '#fff';
+    yesBtn.style.background = '#f4f6f9'; yesBtn.style.color = 'var(--text3)';
+  }
+}
+
+// Highlight selected status radio
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.ms-status-opt input').forEach(radio => {
+    radio.addEventListener('change', () => {
+      document.querySelectorAll('.ms-status-opt').forEach(opt => {
+        opt.style.borderColor = 'var(--border)';
+        opt.style.background = '#fff';
+      });
+      const lbl = radio.closest('.ms-status-opt');
+      if (lbl) {
+        const v = radio.value;
+        lbl.style.borderColor = v === 'Fully Operational' ? 'var(--green)' : v === 'Operational with observation' ? 'var(--amber)' : 'var(--pb-red)';
+        lbl.style.background = v === 'Fully Operational' ? 'rgba(26,138,80,0.04)' : v === 'Operational with observation' ? 'rgba(192,90,0,0.04)' : 'rgba(204,34,17,0.04)';
+      }
+    });
+  });
+});
+
+function getSelectedStatus() {
+  const checked = document.querySelector('input[name="ms-status-r"]:checked');
+  return checked ? checked.value : 'Fully Operational';
+}
+
+async function submitMaintRecord() {
+  const msgEl = document.getElementById('ms-msg');
+  msgEl.className = 'msg'; msgEl.textContent = '';
+  const reason = document.getElementById('ms-reason').value.trim();
+  const work   = document.getElementById('ms-work').value.trim();
+  const date   = document.getElementById('ms-date').value;
+  if (!date)   { msgEl.textContent = 'Date is required.'; msgEl.className = 'msg error show'; return; }
+  if (!reason) { msgEl.textContent = 'Reason for Service is required.'; msgEl.className = 'msg error show'; return; }
+  if (!work)   { msgEl.textContent = 'Work Description is required.'; msgEl.className = 'msg error show'; return; }
+
+  const btn = document.getElementById('ms-submit-btn');
+  btn.textContent = 'Saving…'; btn.disabled = true;
+
+  const data = {
+    date,
+    season:        document.getElementById('ms-season').value,
+    hours:         document.getElementById('ms-hours').value,
+    type:          document.getElementById('ms-type').value,
+    category:      document.getElementById('ms-cat').value,
+    labour:        document.getElementById('ms-labour').value,
+    by:            document.getElementById('ms-by').value.trim(),
+    verified:      document.getElementById('ms-verified').value.trim(),
+    downtime:      document.getElementById('ms-downtime').value || '0',
+    status:        getSelectedStatus(),
+    reason,
+    work,
+    parts_yn:      document.getElementById('ms-pyn').value,
+    parts_detail:  msPartsActive ? document.getElementById('ms-pdetail').value.trim() : '',
+    parts_src:     msPartsActive ? document.getElementById('ms-psrc').value : '',
+    followup:      document.getElementById('ms-fyn').value,
+    followup_notes: msFollowupActive ? document.getElementById('ms-fnotes').value.trim() : '',
+  };
+
+  try {
+    const r = await api('addMaintRecord', data);
+    if (r.success) {
+      document.getElementById('ms-form').style.display = 'none';
+      document.getElementById('ms-success').style.display = 'block';
+      document.getElementById('ms-success-id').textContent = 'Record ID: ' + (r.id || '—');
+      snack('✓ Service record saved — ' + (r.id || ''));
+    } else {
+      msgEl.textContent = 'Error: ' + (r.error || 'Unknown error. Please try again.');
+      msgEl.className = 'msg error show';
+    }
+  } catch(e) {
+    msgEl.textContent = 'Connection error — check your internet connection and try again.';
+    msgEl.className = 'msg error show';
+  } finally {
+    btn.textContent = '✓ Save Service Record'; btn.disabled = false;
+  }
+}
+
+function resetMaintSubmit() {
+  document.getElementById('ms-form').style.display = 'block';
+  document.getElementById('ms-success').style.display = 'none';
+  clearMaintSubmit();
+}
+
+function clearMaintSubmit() {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('ms-date').value = today;
+  document.getElementById('ms-season').value = 'Winter';
+  document.getElementById('ms-hours').value = '';
+  document.getElementById('ms-downtime').value = '0';
+  document.getElementById('ms-type').value = 'Scheduled / Preventive';
+  document.getElementById('ms-cat').value = 'Engine';
+  document.getElementById('ms-labour').value = 'In-house team';
+  document.getElementById('ms-by').value = '';
+  document.getElementById('ms-verified').value = '';
+  document.getElementById('ms-reason').value = '';
+  document.getElementById('ms-work').value = '';
+  const msgEl = document.getElementById('ms-msg');
+  if (msgEl) { msgEl.className = 'msg'; msgEl.textContent = ''; }
+  setPartsToggle(false);
+  setFollowupToggle(false);
+  const radios = document.querySelectorAll('input[name="ms-status-r"]');
+  if (radios.length) radios[0].checked = true;
+  document.querySelectorAll('.ms-status-opt').forEach(opt => {
+    opt.style.borderColor = 'var(--border)';
+    opt.style.background = '#fff';
+  });
+  updateMSTypeHint();
+}
+
 </script>
 </body>
 </html>
